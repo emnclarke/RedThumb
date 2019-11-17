@@ -1,7 +1,7 @@
 package com.example.redthumbapp;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -21,19 +21,19 @@ public class PlantData {
 
     private int datapoints;
 
-    private Date times[];
+    private ArrayList<Date> times;
 
-    private boolean[] sunLight;
-    private int idealSunCoverage;
+    private ArrayList<Boolean> sunLight;
+    private Double idealSunCoverage;
 
-    private int[] temperature;
-    private int idealTemperature;
+    private ArrayList<Double> temperature;
+    private Double idealTemperature;
 
-    private int[] humidity;
-    private int idealHumidity;
+    private ArrayList<Double> humidity;
+    private Double idealHumidity;
 
-    private int[] soilMoisture;
-    private int idealSoilMoisture;
+    private ArrayList<Double> soilMoisture;
+    private Double idealSoilMoisture;
 
 
     /**
@@ -44,22 +44,24 @@ public class PlantData {
         this.datapoints = plantDataRaw.length;
         this.plantDataRaw = plantDataRaw;
         this.plantTypeData = plantTypeData;
-        try {
-            for(int i = 0;i < datapoints;i++) {
-                this.times[i] = (Date) (plantDataRaw[i].get("time"));
-                this.sunLight[i] = plantDataRaw[i].getBoolean("sunlight");
-                this.humidity[i] = plantDataRaw[i].getInt("humidity");
-                this.temperature[i] = plantDataRaw[i].getInt("temperature");
-                this.soilMoisture[i] = plantDataRaw[i].getInt("soil_moisture");
-            }
-            this.idealSunCoverage = plantTypeData.getInt("sun_coverage");
-            this.idealHumidity = plantTypeData.getInt("humidity");
-            this.idealTemperature = plantTypeData.getInt("temperature");
-            this.idealSoilMoisture = plantTypeData.getInt("soil_moisture");
 
-        }catch(JSONException e1){
-            //TODO: Handle this error!
+        this.times = new ArrayList<>();
+        this.sunLight = new ArrayList<>();
+        this.soilMoisture = new ArrayList<>();
+        this.humidity = new ArrayList<>();
+        this.temperature = new ArrayList<>();
+
+        for(int i = 0;i < datapoints;i++) {
+            this.times.add(i,(Date) (plantDataRaw[i].get("time")));
+            this.sunLight.add(i,(boolean)plantDataRaw[i].get("sunlight"));
+            this.humidity.add(i, (double)plantDataRaw[i].get("humidity"));
+            this.temperature.add(i,(double)plantDataRaw[i].get("temperature"));
+            this.soilMoisture.add(i,(double)plantDataRaw[i].get("soil_moisture"));
         }
+        this.idealSunCoverage = (double)plantTypeData.get("sun_coverage");
+        this.idealHumidity = (double)plantTypeData.get("humidity");
+        this.idealTemperature = (double)plantTypeData.get("temperature");
+        this.idealSoilMoisture = (double)plantTypeData.get("soil_moisture");
     }
 
     /**
@@ -68,34 +70,31 @@ public class PlantData {
      */
     public void addPlantData(JSONObject[] plantDataRaw){
         boolean duplicateFlag;
-        try{
-            for(int i = 0; i < plantDataRaw.length; i ++){
-                duplicateFlag = false;
-                Date currPlantData = (Date) plantDataRaw[i].get("time");
-                for(int j = 0; j < datapoints; j++){
-                    if(this.times[j].equals(currPlantData)){
-                        duplicateFlag = true;
-                        break;
-                    }
-                }
-                if(!duplicateFlag){
-                    this.times[datapoints] = (Date) (plantDataRaw[i].get("time"));
-                    this.sunLight[datapoints] = plantDataRaw[i].getBoolean("sunlight");
-                    this.humidity[datapoints] = plantDataRaw[i].getInt("humidity");
-                    this.temperature[datapoints] = plantDataRaw[i].getInt("temperature");
-                    this.soilMoisture[datapoints] = plantDataRaw[i].getInt("soil_moisture");
-                    datapoints++;
+        for(int i = 0; i < plantDataRaw.length; i ++){
+            duplicateFlag = false;
+            Date currPlantData = (Date) plantDataRaw[i].get("time");
+            for(int j = 0; j < datapoints; j++){
+                if(this.times.get(j).equals(currPlantData)){
+                    duplicateFlag = true;
+                    break;
                 }
             }
+            if(!duplicateFlag){
+                this.times.add(datapoints,(Date) (plantDataRaw[i].get("time")));
+                this.sunLight.add(datapoints,(boolean)plantDataRaw[i].get("sunlight"));
+                this.humidity.add(datapoints, (double)plantDataRaw[i].get("humidity"));
+                this.temperature.add(datapoints,(double)plantDataRaw[i].get("temperature"));
+                this.soilMoisture.add(datapoints,(double)plantDataRaw[i].get("soil_moisture"));
+                datapoints++;
+            }
+        }
 
-        }catch (JSONException e1){
 
         }
-    }
 
     //Sensor values record sunlight or no sunlight and give us a sunlight hours measurement,
     //This hours value is assumed to be correct and we won't adjust for error.
-    private int getSunCoverageQuality(int sunCoverageHours) {
+    private Double getSunCoverageQuality(int sunCoverageHours) {
         return (Math.abs(sunCoverageHours-idealSunCoverage)/((sunCoverageHours+idealSunCoverage)/2))*100;
     }
 
@@ -103,22 +102,22 @@ public class PlantData {
     //Quality values are adjusted by the error of the sensor,
     //if the value is within the error of the sensor it gets 100% quality.
 
-    private int getTemperatureQuality(int temperature) {
-        int tempDiff = idealTemperature - temperature;
+    private Double getTemperatureQuality(double temperature) {
+        Double tempDiff = idealTemperature - temperature;
         temperature += (Math.abs(tempDiff) > TEMPERATURE_ERROR ? TEMPERATURE_ERROR * (tempDiff > 0 ? 1 : -1) : tempDiff);
 
         return (Math.abs(temperature - idealTemperature)/((temperature+idealTemperature)/2))*100;
     }
 
-    private int getSoilMoistureQuality(int soilMoisture) {
-        int moistDiff = idealSoilMoisture - soilMoisture;
+    private Double getSoilMoistureQuality(double soilMoisture) {
+        Double moistDiff = idealSoilMoisture - soilMoisture;
         soilMoisture += (Math.abs(moistDiff) > MOISTURE_ERROR ? MOISTURE_ERROR * (moistDiff > 0 ? 1 : -1) : moistDiff);
 
         return ((Math.abs(soilMoisture-idealSoilMoisture))/((soilMoisture+idealSoilMoisture)/2))*100;
     }
 
-    private int getHumidityQuality(int humidity) {
-        int humidDiff = idealHumidity - humidity;
+    private Double getHumidityQuality(double humidity) {
+        Double humidDiff = idealHumidity - humidity;
         humidity += (Math.abs(humidDiff) > HUMIDITY_ERROR ? HUMIDITY_ERROR * (humidDiff > 0 ? 1 : -1) : humidDiff);
 
         return (Math.abs((humidity/idealHumidity))/((humidity+idealHumidity)/2))*100;
@@ -134,7 +133,7 @@ public class PlantData {
         }
         List<Integer> plantDataSubset = new ArrayList<Integer>();
         for(int i = 0; i < datapoints; i++){
-            if(this.times[i].after(startDate) && this.times[i].before(endDate)){
+            if(this.times.get(i).after(startDate) && this.times.get(i).before(endDate)){
                 plantDataSubset.add(i);
             }
         }
@@ -151,7 +150,7 @@ public class PlantData {
         //Find the index of the most recent date.
         int maxDate = 0;
         for(int i = 1; i < datapoints; i++){
-            if(this.times[maxDate].before(this.times[i])){
+            if(this.times.get(maxDate).before(this.times.get(i))){
                 maxDate = i;
             }
         }
@@ -163,10 +162,10 @@ public class PlantData {
      * @return The most recent date.
      */
     public java.sql.Date getMostRecentDate(){
-        Date maxDate = this.times[0];
+        Date maxDate = this.times.get(0);
         for(int i = 1; i < datapoints; i++){
-            if(maxDate.before(this.times[i])){
-                maxDate = this.times[i];
+            if(maxDate.before(this.times.get(i))){
+                maxDate = this.times.get(i);
             }
         }
 
@@ -178,15 +177,15 @@ public class PlantData {
      * @return An array of ints containing the most recent feed data. (sunLight,Humidity,Temperature,SoilMoisture)
      *
      */
-    public int[] getFeedData(){
+    public double[] getFeedData(){
 
         int maxDate = getMostRecentDateIndex();
 
-        int[] feedData = new int[4];
-        feedData[0] = (this.sunLight[maxDate]) ? 1 : 0; //Convert from boolean to int.
-        feedData[1] = this.humidity[maxDate];
-        feedData[2] = this.temperature[maxDate];
-        feedData[3] = this.soilMoisture[maxDate];
+        double[] feedData = new double[4];
+        feedData[0] = (this.sunLight.get(maxDate)) ? 1 : 0; //Convert from boolean to int.
+        feedData[1] = this.humidity.get(maxDate);
+        feedData[2] = this.temperature.get(maxDate);
+        feedData[3] = this.soilMoisture.get(maxDate);
 
         return feedData;
     }
@@ -195,7 +194,7 @@ public class PlantData {
      * The feed qualities are the most recent 24 hours of qualities.
      * @return An array of quality ints (Sunlight, Humidity,Temperature,SoilMoisture).
      */
-    public int[] getFeedDataQualities(){
+    public double[] getFeedDataQualities(){
         int maxDateIndex = getMostRecentDateIndex();
 
         //Get date 24 prior to the maxDate.
@@ -210,18 +209,18 @@ public class PlantData {
         int soilMoistureTotal = 0;
 
         for(int i : plantDataSubset){
-            sunCoverage += (this.sunLight[i]) ? (1/60) : 0; //Add a minute if true, else add 0
-            humidityTotal += getHumidityQuality(this.humidity[i]);
-            temperatureTotal += getTemperatureQuality(this.temperature[i]);
-            soilMoistureTotal += getSoilMoistureQuality(this.soilMoisture[i]);
+            sunCoverage += (this.sunLight.get(i)) ? (1/60) : 0; //Add a minute if true, else add 0
+            humidityTotal += getHumidityQuality(this.humidity.get(i));
+            temperatureTotal += getTemperatureQuality(this.temperature.get(i));
+            soilMoistureTotal += getSoilMoistureQuality(this.soilMoisture.get(i));
         }
         int n = plantDataSubset.size();
-        int sunCoverageQuality = getSunCoverageQuality(sunCoverage);
-        int humidityQuality = humidityTotal/n;
-        int temperatureQuality = temperatureTotal/n;
-        int soilMoistureQuality = soilMoistureTotal/n;
+        double sunCoverageQuality = getSunCoverageQuality(sunCoverage);
+        double humidityQuality = humidityTotal/n;
+        double temperatureQuality = temperatureTotal/n;
+        double soilMoistureQuality = soilMoistureTotal/n;
 
-        int[] feedData = new int[4];
+        double[] feedData = new double[4];
         feedData[0] = sunCoverageQuality;
         feedData[1] = humidityQuality;
         feedData[2] = temperatureQuality;
@@ -230,19 +229,19 @@ public class PlantData {
     }
 
 
-    public Map<Date,Integer[]> getHistoricalFeed(Date startDate, Date endDate){
+    public Map<Date,Double[]> getHistoricalFeed(Date startDate, Date endDate){
         List<Integer> plantDataSubset = createPlantDataSubset(startDate,endDate);
         int n = plantDataSubset.size();
 
-        Map<Date,Integer[]> historicalFeedData = new HashMap<>();
+        Map<Date,Double[]> historicalFeedData = new HashMap<>();
 
         for(int i : plantDataSubset){
-            Integer[] currFeedData = new Integer[4];
-            currFeedData[0] = this.sunLight[i] ? 1 : 0;
-            currFeedData[1] = this.humidity[i];
-            currFeedData[2] = this.temperature[i];
-            currFeedData[3] = this.soilMoisture[i];
-            historicalFeedData.put(this.times[i],currFeedData);
+            Double[] currFeedData = new Double[4];
+            currFeedData[0] = this.sunLight.get(i) ? 1.0 : 0.0;
+            currFeedData[1] = this.humidity.get(i);
+            currFeedData[2] = this.temperature.get(i);
+            currFeedData[3] = this.soilMoisture.get(i);
+            historicalFeedData.put(this.times.get(i),currFeedData);
         }
 
         return historicalFeedData;
