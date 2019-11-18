@@ -51,17 +51,35 @@ public class PlantData {
         this.humidity = new ArrayList<>();
         this.temperature = new ArrayList<>();
 
-        for(int i = 0;i < datapoints;i++) {
-            this.times.add(i,(Date) (plantDataRaw[i].get("time")));
-            this.sunLight.add(i,(boolean)plantDataRaw[i].get("sunlight"));
-            this.humidity.add(i, (double)plantDataRaw[i].get("humidity"));
-            this.temperature.add(i,(double)plantDataRaw[i].get("temperature"));
-            this.soilMoisture.add(i,(double)plantDataRaw[i].get("soil_moisture"));
+        int newDataPoints = datapoints;
+        for(int i = 0;i < newDataPoints;i++) {
+            if(plantDataRaw[i].get("time") == null){
+                //A date is required!
+                datapoints--;
+                if(datapoints <= 0){
+                    throw new IllegalArgumentException("Atleast one JSONObject must be valid!");
+                }
+                continue;
+            }
+            this.times.add((Date) (plantDataRaw[i].get("time")));
+            this.sunLight.add((plantDataRaw[i].get("sunlight") == null) ? null : (boolean)plantDataRaw[i].get("sunlight"));
+            this.humidity.add((plantDataRaw[i].get("humidity") == null) ? null : (double)plantDataRaw[i].get("humidity"));
+            this.temperature.add((plantDataRaw[i].get("temperature")==null) ? null : (double)plantDataRaw[i].get("temperature"));
+            this.soilMoisture.add((plantDataRaw[i].get("soil_moisture") == null)? null : (double)plantDataRaw[i].get("soil_moisture"));
+
         }
         this.idealSunCoverage = (double)plantTypeData.get("sun_coverage");
         this.idealHumidity = (double)plantTypeData.get("humidity");
         this.idealTemperature = (double)plantTypeData.get("temperature");
         this.idealSoilMoisture = (double)plantTypeData.get("soil_moisture");
+    }
+
+    /**
+     * A simple getter for datapoints.
+     * @return The amount of datapoints in the plantData set.
+     */
+    public int getDatapoints(){
+        return datapoints;
     }
 
     /**
@@ -168,7 +186,6 @@ public class PlantData {
                 maxDate = this.times.get(i);
             }
         }
-
         return maxDate;
     }
 
@@ -180,7 +197,6 @@ public class PlantData {
     public double[] getFeedData(){
 
         int maxDate = getMostRecentDateIndex();
-
         double[] feedData = new double[4];
         feedData[0] = (this.sunLight.get(maxDate)) ? 1 : 0; //Convert from boolean to int.
         feedData[1] = this.humidity.get(maxDate);
