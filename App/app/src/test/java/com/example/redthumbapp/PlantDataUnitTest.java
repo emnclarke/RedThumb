@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.junit.Test;
 
 import java.sql.Date;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -219,9 +220,38 @@ public class PlantDataUnitTest {
 
     @Test
     public void FeedQualitiesTest1(){
+        JSONObject[] plantDataArr = new JSONObject[3];
 
+        plantDataArr[1] = createGoodPlantData2(new Date(100));
+        plantDataArr[0] = createGoodPlantData2(new Date(1));
+        plantDataArr[2] = createGoodPlantData2(new Date(99));
+        PlantData plantDataGood = new PlantData(plantDataArr, createGoodPlantTypeData());
+        plantDataGood.getFeedDataQualities();
 
     }
 
+    @Test
+    public void HistoricalFeedTest1(){
+        JSONObject[] plantDataArr = new JSONObject[3];
+
+        plantDataArr[1] = createGoodPlantData2(new Date(100));
+        plantDataArr[0] = createGoodPlantData2(new Date(1));
+        plantDataArr[2] = createGoodPlantData2(new Date(99));
+        PlantData plantDataGood = new PlantData(plantDataArr, createGoodPlantTypeData());
+        Map<Date,Double[]> historicalPlantDataMap = plantDataGood.getHistoricalFeed(new Date(2), new Date(101));
+        assertEquals(2,historicalPlantDataMap.size());
+
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void HistoricalFeedTest2(){
+        JSONObject[] plantDataArr = new JSONObject[3];
+
+        plantDataArr[1] = createGoodPlantData2(new Date(100));
+        plantDataArr[0] = createGoodPlantData2(new Date(1));
+        plantDataArr[2] = createGoodPlantData2(new Date(99));
+        PlantData plantDataGood = new PlantData(plantDataArr, createGoodPlantTypeData());
+        Map<Date,Double[]> historicalPlantDataMap = plantDataGood.getHistoricalFeed(new Date(101), new Date(2));
+    }
 
 }

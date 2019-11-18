@@ -1,6 +1,5 @@
 package com.example.redthumbapp;
 
-import org.json.JSONException;
 import org.json.simple.JSONObject;
 
 import java.sql.Date;
@@ -12,33 +11,43 @@ import java.util.Map;
 
 public class PlantData {
 
+    //Values taken from the hardware documentation.
     private static int TEMPERATURE_ERROR = 2;
     private static int MOISTURE_ERROR = 5;
     private static int HUMIDITY_ERROR = 5;
 
+    //Fields obtained from the database
     private JSONObject[] plantDataRaw;
     private JSONObject plantTypeData;
 
+    //Amount of indivual datapoints in the plantData set.
     private int datapoints;
 
+    //Each of the following are columns in the database.
+    //Time
     private ArrayList<Date> times;
 
+    //Sunlight
     private ArrayList<Boolean> sunLight;
     private Double idealSunCoverage;
 
+    //Temperature
     private ArrayList<Double> temperature;
     private Double idealTemperature;
 
+    //Humidity
     private ArrayList<Double> humidity;
     private Double idealHumidity;
 
+    //Soil Moisture
     private ArrayList<Double> soilMoisture;
     private Double idealSoilMoisture;
 
 
     /**
-     * Default constructor for one data point, used for feed view.
+     * Default constructor.
      * @param plantDataRaw: raw data obtained from the database
+     * @param plantTypeData: plant type data obtained from the database
      */
     public PlantData(JSONObject[] plantDataRaw, JSONObject plantTypeData){
         this.datapoints = plantDataRaw.length;
@@ -217,7 +226,7 @@ public class PlantData {
         Calendar cal = Calendar.getInstance();
         cal.setTime(this.getMostRecentDate());
         cal.add(Calendar.DAY_OF_YEAR,-1);
-        List<Integer> plantDataSubset = createPlantDataSubset( (Date) cal.getTime(), this.getMostRecentDate());
+        List<Integer> plantDataSubset = createPlantDataSubset( new Date(cal.getTimeInMillis()), this.getMostRecentDate());
 
         int sunCoverage = 0;
         int humidityTotal = 0;
@@ -245,6 +254,12 @@ public class PlantData {
     }
 
 
+    /**
+     * Returns a subset of plantData determined by the start and end date.
+     * @param startDate: The start of the range for the subset.
+     * @param endDate: The end of the range for the subset.
+     * @return A map of the subset of data, with the datapoint being the value and the time is the key.
+     */
     public Map<Date,Double[]> getHistoricalFeed(Date startDate, Date endDate){
         List<Integer> plantDataSubset = createPlantDataSubset(startDate,endDate);
         int n = plantDataSubset.size();
