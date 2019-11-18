@@ -4,6 +4,8 @@ import socket, sys, time, datetime
 import json
 import mysql.connector
 
+debug = False
+
 starttime=time.time()
 dataCollectionInterval = 10.0
 
@@ -26,8 +28,10 @@ pictureFlag = False
 waterFlag = False
 
 while True:
+    print ("INFO: Fetching Smart Pots from Database")
     dbcursor.execute("SELECT * FROM SmartPots")
     pots = dbcursor.fetchall()
+    
     for pot in pots:
         potID = pot[0]
         potIP = pot[2]
@@ -35,69 +39,100 @@ while True:
         lastWatered = pot[4]
         lowWaterFlag = pot[5]
         dbWaterFlag = pot[6]
+        
+        print("\nINFO: Pot " + str(potID))
+        
+        if debug:
+            print ("DEBUG: Pot " + str(potID) + " data: " + str(pot))
+        
+        print ("INFO: Requesting info from pot " + str(potID) + " at ip: " + potIP)
         s.sendto("RequestPotData", (potIP, port))
-        print ("Waiting to receive data from " + potIP)
         try:
+            print ("INFO: Waiting to receive data from pot " + str(potID) + " at ip: " + potIP)
             buf, address = s.recvfrom(port)
             if buf.split()[0] != "ReportPotData":
-                print ("Received wrong response")
+                print ("ERROR: Received wrong response from pot " + str(potID) + " at ip: " + potIP)
             else:
+                print ("INFO: Data received from pot " + str(potID) + " at ip: " + potIP)
+                print ("INFO: Submitting sensor data to Database")
                 data = buf[14:]
-                print ("dumping to db: " + data)
+                
+                if debug:
+                    print ("DEBUG: Pot " + str(potID) + " sensor data: " + data.rstrip())
+                
                 jsonData = json.loads(data)
                 sql = "INSERT INTO PlantData(pot_id, temperature, humidity, soil_moisture, sunlight) VALUES (%d,%f,%f,\"%s\",%d)"
                 val = (potID, jsonData["temperature"], jsonData["humidity"], jsonData["soilMoisture"], int(jsonData["sunlight"]))
                 sqlStatement = sql % val
-                print sqlStatement
+
+                if debug:
+                    print ("DEBUG: Sql statement: " + sqlStatement)
+                
                 dbcursor.execute(sqlStatement)
                 redThumbdb.commit()
             
                 if lastWatered is None and jsonData["soilMoisture"] == "dry":
+                    print ("INFO: Plant has never been watered and soil is dry, setting waterFlag to True")
                     waterFlag = True
             
                 if jsonData["lowWater"]:
+                    print ("INFO: Low water, updating Database")
                     dbcursor.execute("UPDATE SmartPots SET low_water=1 WHERE pot_id=" + str(potID))
-                else:
+                elif lowWaterFlag:
+                    print ("INFO: Low water fixed, updating database")
                     dbcursor.execute("UPDATE SmartPots SET low_water=0 WHERE pot_id=" + str(potID))
 
+            print ("INFO: Fetching plant type data from Database")
             dbcursor.execute("SELECT * FROM PlantTypes WHERE plant_type=" + str(plantType))
             plantInfo = dbcursor.fetchone()
             waterFrequency = plantInfo[2]
             waterLength = plantInfo[3]
             waterDelta = 0
             
+            if debug:
+                print ("DEBUG: Plant " + str(plantType) + " info: " + str(plantInfo))
+            
             if lastWatered is not None:
                 waterDelta = (datetime.date.today() - lastWatered).days
+                if debug:
+                    print ("DEBUG: Water delta: " + str(waterDelta))
             
-            if dbWaterFlag or waterDelta >= waterFrequency:
+            if dbWaterFlag:
                 waterFlag = True
+                if debug:
+                    print ("DEBUG: Water flag triggered by database")
+            elif waterDelta >= waterFrequency:
+                waterFlag = True
+                if debug:
+                    print ("DEBUG: Water flag triggered by water delta")
 
             if pictureFlag:
-                print ("taking picture")
+                print ("INFO: Requesting pot " + str(potID) + " take picture")
                 s.sendto("TakePicture", (potIP, port))
-                print ("Waiting to receive response from " + potIP)
+                print ("INFO: Waiting to receive pictureAck from pot " + str(potID) + " at ip: " + potIP)
                 buf, address = s.recvfrom(port)
                 if buf.split()[0] != "pictureAck":
-                    print ("Received wrong response")
+                    print ("ERROR: Received wrong response from pot " + str(potID) + " at ip: " + potIP)
                 else:
-                    print ("picture taken")
+                    print ("INFO: pictureAck received from pot " + str(potID) + " at ip: " + potIP)
                     pictureFlag = False
 
             if waterFlag and not lowWaterFlag:
-                print ("watering plant")
+                print ("INFO: Requesting pot " + str(potID) + " water plant")
                 s.sendto("WaterPlant", (potIP, port))
-                print ("Waiting to receive response from " + potIP)
+                print ("INFO: Waiting to receive waterAck from pot " + str(potID) + " at ip: " + potIP)
                 buf, address = s.recvfrom(port)
                 if buf.split()[0] != "WaterAck":
-                    print ("Received wrong response")
+                    print ("ERROR: Received wrong response from pot " + str(potID) + " at ip: " + potIP)
                 else:
-                    print ("plant watered")
+                    print ("INFO: waterAck received from pot " + str(potID) + " at ip: " + potIP + ". Updating database to disable waterFlag")
                     dbcursor.execute("UPDATE SmartPots SET last_watered=CURRENT_DATE, water_flag=0 WHERE pot_id=" + str(potID))
                     waterFlag = False
     
         except socket.timeout:
-            print ("Pot " + str(potID) + " timeout")
-
+            print ("ERROR: Pot " + str(potID) + " timeout at ip: " + potIP + ". Continuing to next pot")
+    
+    print ("\nINFO: Waiting for next data collection. Current interval: " + str(dataCollectionInterval) + "s\n")
     time.sleep(dataCollectionInterval - ((time.time() - starttime) % dataCollectionInterval))
 
 quit()
