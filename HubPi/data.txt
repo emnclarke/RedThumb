@@ -1,0 +1,167 @@
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.3, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 25.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.2, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 20.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"temperature":21.50,"humidity":23.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":23.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.50,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.60,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"temperature":21.60,"humidity":22.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.1, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.1, "sunlight": true, "humidity": 23.0}
+{"lowWater": false, "soilMoisture": "dry", "temperature": 22.1, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 24.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": false, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 23.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.8, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 21.9, "sunlight": true, "humidity": 21.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
+{"lowWater": true, "soilMoisture": "dry", "temperature": 22.0, "sunlight": true, "humidity": 22.0}
