@@ -33,6 +33,7 @@ while True:
         potIP = pot[2]
         plantType = pot[3]
         lastWatered = pot[4]
+        lowWaterFlag = pot[5]
         dbWaterFlag = pot[6]
         s.sendto("RequestPotData", (potIP, port))
         print ("Waiting to receive data from " + potIP)
@@ -82,7 +83,7 @@ while True:
                     print ("picture taken")
                     pictureFlag = False
 
-            if waterFlag:
+            if waterFlag and not lowWaterFlag:
                 print ("watering plant")
                 s.sendto("WaterPlant", (potIP, port))
                 print ("Waiting to receive response from " + potIP)
