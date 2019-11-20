@@ -37,4 +37,6 @@ class SmartPot(object):
     def toString(self):
         return str(self.potID) + " " + str(self.name) + " " + str(self.potIP) + " " + str(self.plantID) + " " + str(self.lastWatered) + " " + str(self.lowWater) + " " + str(self.waterFlag)
 
-
+class TooFastError(RuntimeError):
+    def __init__(self, arg):
+      self.args = arg

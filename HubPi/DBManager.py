@@ -5,24 +5,26 @@ import mysql.connector
 from dataClasses import *
 
 class DBManager(object):
-    redThumbdb = None
-    dbcursor = None
+    _redThumbdb = None
+    _cursor = None
+    _lastEnteredTimestamp = None
 
     def __init__(self):
-        self.redThumbdb = mysql.connector.connect(
+        self._redThumbdb = mysql.connector.connect(
             host="localhost",
             user="python",
             passwd="python",
             database="red_thumb"
         )
-        self.cursor = self.redThumbdb.cursor()
+        self._cursor = self._redThumbdb.cursor()
         self.__createTables()
+        self._lastEnteredData = time.time()
 
     # initializes all the tables if they don't already exist
     def __createTables(self):
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS SmartPots (pot_id int(11) NOT NULL AUTO_INCREMENT, name tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no_name', pot_ip tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.0.0.0', plant_type int(11) NOT NULL DEFAULT 1, last_watered date DEFAULT NULL, low_water tinyint(1) NOT NULL DEFAULT 0, water_flag tinyint(1) NOT NULL DEFAULT 0, PRIMARY KEY (pot_id)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS PlantTypes (plant_type int(11) NOT NULL AUTO_INCREMENT,name tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no_name',water_frequency int(11) NOT NULL DEFAULT 1,water_length int(11) NOT NULL DEFAULT 1,temperature float NOT NULL DEFAULT 20,humidity float NOT NULL DEFAULT 40,soil_moisture tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'wet',sun_coverage int(11) NOT NULL DEFAULT 6,PRIMARY KEY (plant_type)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS PlantData (time timestamp NOT NULL DEFAULT current_timestamp(), pot_id int(11) NOT NULL, temperature float DEFAULT NULL, humidity float DEFAULT NULL, soil_moisture tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL, sunlight tinyint(1) DEFAULT NULL, PRIMARY KEY (time)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
+        self._cursor.execute("CREATE TABLE IF NOT EXISTS SmartPots (pot_id int(11) NOT NULL AUTO_INCREMENT, name tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no_name', pot_ip tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.0.0.0', plant_type int(11) NOT NULL DEFAULT 1, last_watered date DEFAULT NULL, low_water tinyint(1) NOT NULL DEFAULT 0, water_flag tinyint(1) NOT NULL DEFAULT 0, PRIMARY KEY (pot_id)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
+        self._cursor.execute("CREATE TABLE IF NOT EXISTS PlantTypes (plant_type int(11) NOT NULL AUTO_INCREMENT,name tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no_name',water_frequency int(11) NOT NULL DEFAULT 1,water_length int(11) NOT NULL DEFAULT 1,temperature float NOT NULL DEFAULT 20,humidity float NOT NULL DEFAULT 40,soil_moisture tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'wet',sun_coverage int(11) NOT NULL DEFAULT 6,PRIMARY KEY (plant_type)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
+        self._cursor.execute("CREATE TABLE IF NOT EXISTS PlantData (time timestamp NOT NULL DEFAULT current_timestamp(), pot_id int(11) NOT NULL, temperature float DEFAULT NULL, humidity float DEFAULT NULL, soil_moisture tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL, sunlight tinyint(1) DEFAULT NULL, PRIMARY KEY (time)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
     
     
     # Plant type methods
@@ -95,8 +97,8 @@ class DBManager(object):
             variableString = variableString[:-2]
             
         sql = "INSERT INTO PlantTypes (%s) VALUES (%s)" % (nameString, variableString)
-        self.cursor.execute(sql)
-        self.redThumbdb.commit()
+        self._cursor.execute(sql)
+        self._redThumbdb.commit()
         
     def updatePlantType(self, plant):
         if not isinstance(plant, PlantType):
@@ -114,8 +116,8 @@ class DBManager(object):
             updateString = updateString[:-2]
         
         sql = "UPDATE PlantTypes SET %s WHERE plant_id=%s" % (updateString, str(plant.plantID))
-        self.cursor.execute(sql)
-        self.redThumbdb.commit()
+        self._cursor.execute(sql)
+        self._redThumbdb.commit()
         
     def _convertDBtoPlantType(self, plantDB):
         plant = PlantType(plantDB[0],plantDB[1],plantDB[2],plantDB[3],plantDB[4],plantDB[5],plantDB[6],plantDB[7])
@@ -126,15 +128,15 @@ class DBManager(object):
             raise TypeError("plantID must be int. Got: " + str(type(plant.plantID)))
         
         sql = "SELECT * FROM PlantTypes WHERE plant_id=%s" % (str(plantID))
-        self.cursor.execute(sql)
-        plantDB = self.cursor.fetchone()
+        self._cursor.execute(sql)
+        plantDB = self._cursor.fetchone()
         
         return self._convertDBtoPlantType(plantDB)
         
     def fetchPlantTypes(self):
         sql = "SELECT * FROM PlantTypes"
-        self.cursor.execute(sql)
-        plantDBList = self.cursor.fetchall()
+        self._cursor.execute(sql)
+        plantDBList = self._cursor.fetchall()
         
         plants = []
         
@@ -148,8 +150,8 @@ class DBManager(object):
             raise TypeError("plantID must be int. Got: " + str(type(plant.plantID)))
         
         sql = "DELETE FROM PlantTypes WHERE plant_id=%s" % (str(plantID))
-        self.cursor.execute(sql)
-        self.redThumbdb.commit()
+        self._cursor.execute(sql)
+        self._redThumbdb.commit()
     
     
     
@@ -211,8 +213,8 @@ class DBManager(object):
             variableString = variableString[:-2]
             
         sql = "INSERT INTO SmartPots (%s) VALUES (%s)" % (nameString, variableString)
-        self.cursor.execute(sql)
-        self.redThumbdb.commit()
+        self._cursor.execute(sql)
+        self._redThumbdb.commit()
         
     def updatePot(self, pot):
         if not isinstance(pot, SmartPot):
@@ -230,8 +232,8 @@ class DBManager(object):
             updateString = updateString[:-2]
         
         sql = "UPDATE SmartPots SET %s WHERE pot_id=%s" % (updateString, str(pot.potID))
-        self.cursor.execute(sql)
-        self.redThumbdb.commit()
+        self._cursor.execute(sql)
+        self._redThumbdb.commit()
     
     def _convertDBtoSmartPot(self, potDB):
         pot = SmartPot(potDB[0],potDB[1],potDB[2],potDB[3],potDB[4],potDB[5],potDB[6])
@@ -242,15 +244,15 @@ class DBManager(object):
             raise TypeError("potID must be int. Got: " + str(type(pot.potID)))
         
         sql = "SELECT * FROM SmartPots WHERE pot_id=%s" % (str(potID))
-        self.cursor.execute(sql)
-        potDB = self.cursor.fetchone()
+        self._cursor.execute(sql)
+        potDB = self._cursor.fetchone()
         
         return self._convertDBtoSmartPot(potDB)
         
     def fetchPots(self):
         sql = "SELECT * FROM SmartPots"
-        self.cursor.execute(sql)
-        potDBList = self.cursor.fetchall()
+        self._cursor.execute(sql)
+        potDBList = self._cursor.fetchall()
         
         pots = []
         
@@ -264,8 +266,8 @@ class DBManager(object):
             raise TypeError("potID must be int. Got: " + str(type(pot.potID)))
         
         sql = "DELETE FROM SmartPots WHERE pot_id=%s" % (str(potID))
-        self.cursor.execute(sql)
-        self.redThumbdb.commit()
+        self._cursor.execute(sql)
+        self._redThumbdb.commit()
     
     
     
@@ -318,10 +320,14 @@ class DBManager(object):
         if nameString != "":
             nameString = nameString[:-2]
             variableString = variableString[:-2]
-            
+        
+        if datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S") == self._lastEnteredTimestamp:
+            raise TooFastError("Timestamp must be unique, wait one second")
+        
         sql = "INSERT INTO PlantData (%s) VALUES (%s)" % (nameString, variableString)
-        self.cursor.execute(sql)
-        self.redThumbdb.commit()
+        self._cursor.execute(sql)
+        self._redThumbdb.commit()
+        self._lastEnteredTimestamp = datetime.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
         
     def _convertDBtoPlantData(self, plantDataDB):
         plantData = PlantData(plantDataDB[0],plantDataDB[1],plantDataDB[2],plantDataDB[3],plantDataDB[4],plantDataDB[5])
@@ -332,8 +338,8 @@ class DBManager(object):
             raise TypeError("potID must be int. Got: " + str(type(potID)))
             
         sql = "SELECT * FROM PlantData WHERE pot_id=%s ORDER BY timestamp DESC LIMIT 1" % (str(potID))
-        self.cursor.execute(sql)
-        plantDataDB = self.cursor.fetchone()
+        self._cursor.execute(sql)
+        plantDataDB = self._cursor.fetchone()
         
         plantData = self._convertDBtoPlantData(plantDataDB)
         
@@ -344,8 +350,8 @@ class DBManager(object):
             raise TypeError("potID must be int. Got: " + str(type(potID)))
             
         sql = "SELECT * FROM PlantData WHERE pot_id=%s ORDER BY timestamp DESC" % (str(potID))
-        self.cursor.execute(sql)
-        plantDataDBList = self.cursor.fetchall()
+        self._cursor.execute(sql)
+        plantDataDBList = self._cursor.fetchall()
         
         plantData = []
         
@@ -361,8 +367,8 @@ class DBManager(object):
             raise TypeError("numDataPoints must be int. Got: " + str(type(timestamp)))
             
         sql = "SELECT * FROM PlantData WHERE pot_id=%s ORDER BY timestamp DESC LIMIT %s" % (str(potID), str(numDataPoints))
-        self.cursor.execute(sql)
-        plantDataDBList = self.cursor.fetchall()
+        self._cursor.execute(sql)
+        plantDataDBList = self._cursor.fetchall()
         
         plantData = []
         
@@ -376,8 +382,8 @@ class DBManager(object):
             raise TypeError("Timestamp must be datetime. Got: " + str(type(timestamp)))
         
         sql = "DELETE FROM PlantData WHERE timestamp='%s'" % (str(timestamp))
-        self.cursor.execute(sql)
-        self.redThumbdb.commit()
+        self._cursor.execute(sql)
+        self._redThumbdb.commit()
         
 
 
@@ -401,16 +407,23 @@ if __name__ == "__main__":
     dataArray.append(PlantData(None, 3, 1, 1, "1", True))
     
     for data in dataArray:
-        try:
-            print data.toString()
-            dbManager.submitPlantData(data)
-            time.sleep(1)
-        except TypeError,e:
-            print ("ERROR (TypeError): " + e.args[0])
-        except ValueError,e:
-            print ("ERROR (ValueError): " + e.args[0])
-        except Exception,e:
-            print ("ERROR (Other): " + e.args[0])
+        while True:
+            try:
+                print data.toString()
+                dbManager.submitPlantData(data)
+                break
+            except TooFastError:
+                print ("Too fast, trying again")
+                time.sleep(1)
+            except TypeError as e:
+                print ("ERROR (TypeError): " + e.args[0])
+                break
+            except ValueError as e:
+                print ("ERROR (ValueError): " + e.args[0])
+                break
+            except Exception as e:
+                print ("ERROR (Other): " + str(e.args))
+                break
     
     print("\nAll data")
     dataDBList = dbManager.fetchAllData(3)
