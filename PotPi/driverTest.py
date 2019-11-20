@@ -38,7 +38,7 @@ else:
 
 # Test 2
 print ("\nTest 2, are both data points valid")
-if not (isJson(dataString) and isJson(dataString2)):
+if  isJson(dataString) and isJson(dataString2):
     print ("pass")
 else:
     print ("fail")
