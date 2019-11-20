@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +51,18 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         TextView textSoilMoisture = viewHolder.textSoilMoisture;
         textSoilMoisture.setText("Soil Moisture: " + (double)Math.round(plantData.getSoilMoisture() * 100d) / 100d + "%");
         ImageView imagePlant = viewHolder.imagePlant;
+
+        ProgressBar progressBarSunlight = viewHolder.progressBarSunlight;
+        progressBarSunlight.setProgress((int)plantData.getSunlightQuality());
+
+        ProgressBar progressBarTemperature = viewHolder.progressBarTemperature;
+        progressBarTemperature.setProgress((int)plantData.getTemperatureQuality());
+
+        ProgressBar progressBarHumidity = viewHolder.progressBarHumidity;
+        progressBarHumidity.setProgress((int)plantData.getHumidityQuality());
+
+        ProgressBar progressBarSoilMoisture = viewHolder.progressBarSoilMositure;
+        progressBarSoilMoisture.setProgress((int)plantData.getSoilMoistureQuality());
     }
 
     // Returns the total count of items in the list
@@ -70,6 +83,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public TextView textHumidity;
     public TextView textSoilMoisture;
     public ImageView imagePlant;
+    //Progress Bars
+    public ProgressBar progressBarSunlight;
+    public ProgressBar progressBarTemperature;
+    public ProgressBar progressBarHumidity;
+    public ProgressBar progressBarSoilMositure;
 
     // We also create a constructor that accepts the entire item row
     // and does the view lookups to find each subview
@@ -86,6 +104,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         textSoilMoisture = (TextView) itemView.findViewById(R.id.textSoilMoisture);
         imagePlant = (ImageView) itemView.findViewById(R.id.plantImageView);
         imagePlant.setImageResource(R.drawable.ic_sprout);
+
+        progressBarSunlight = (ProgressBar) itemView.findViewById(R.id.progressBarSunlight);
+        progressBarTemperature = (ProgressBar) itemView.findViewById(R.id.progressBarTemperature);
+        progressBarHumidity = (ProgressBar) itemView.findViewById(R.id.progressBarHumidity);
+        progressBarSoilMositure = (ProgressBar) itemView.findViewById(R.id.progressBarSoilMoisture);
     }
 }
     // Store a member variable for the contacts
