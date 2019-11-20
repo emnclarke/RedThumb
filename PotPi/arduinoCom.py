@@ -3,9 +3,15 @@
 import serial, time
 
 debug = True
+onMac = True
 
-# Setting up serial connection
-serialport = serial.Serial("/dev/ttyACM0", 9600, timeout=1)
+
+if onMac:
+    # Setting up serial connection
+    serialport = serial.Serial("/dev/cu.usbmodem142401", 9600, timeout=1)
+else:
+    # Setting up serial connection
+    serialport = serial.Serial("/dev/ttyACM0", 9600, timeout=1)
 
 data = ""
 discard = 5 # Number of initial data points to discard (when system is starting up)
@@ -15,7 +21,7 @@ while True:
     command = serialport.readline()
     if command != "":
         if debug:
-            print ("DEBUG: Command: " + command.rstrip())
+            print ("DEBUG: Command: " + str(command.rstrip()))
         splitCommand = command.split()
         if len(splitCommand) > 0:
             # Selecting just the data from the arduino command
