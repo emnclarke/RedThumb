@@ -1,0 +1,1 @@
+1574221731.6800 {"lowWater": false, "soilMoisture": "dry", "temperature": 21.7, "sunlight": true, "humidity": 21.0}
