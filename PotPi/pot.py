@@ -70,7 +70,7 @@ while True:
         s.sendto(message, (hubIP, port))
         print ("INFO: Message sent to hub")
     elif buf.split()[0] == "WaterPlant":
-        if len(buf.split()):
+        if len(buf.split()) == 1:
             length = 1
         else:
             length = int(buf.split()[1])
