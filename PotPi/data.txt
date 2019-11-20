@@ -1,1 +1,1 @@
-1574262829.2100 {"lowWater": false, "soilMoisture": "dry", "temperature": 999, "sunlight": true, "humidity": 21.0}
+1574264551.0800 {"temperature":24.30,"humidity":19.00,"soilMoisture":"dry","sunlight":true,"lowWater":true}
