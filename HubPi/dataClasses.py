@@ -1,13 +1,14 @@
 class PlantData(object):
     def __init__(self, timestamp, potID, temperature, humidity, soilMoisture, sunlight):
         self.timestamp = timestamp
+        self.potID = potID
         self.temperature = temperature
         self.humidity = humidity
         self.soilMoisture = soilMoisture
         self.sunlight = sunlight
         
     def toString(self):
-        return str(self.timestamp) + " " + str(self.temperature) + " " + str(self.humidity) + " " + str(self.soilMoisture) + " " + str(self.sunlight)
+        return str(self.timestamp) + " " + str(self.potID) + " " + str(self.temperature) + " " + str(self.humidity) + " " + str(self.soilMoisture) + " " + str(self.sunlight)
 
 class PlantType(object):
     def __init__(self, plantID, name, waterFrequency, waterLength, temperature, humidity, soilMoisture, sunCoverage):
@@ -35,3 +36,5 @@ class SmartPot(object):
         
     def toString(self):
         return str(self.potID) + " " + str(self.name) + " " + str(self.potIP) + " " + str(self.plantID) + " " + str(self.lastWatered) + " " + str(self.lowWater) + " " + str(self.waterFlag)
+
+

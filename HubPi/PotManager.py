@@ -2,7 +2,7 @@
 
 import socket, sys, time, datetime
 import json
-from redThumbDataClasses import *
+from dataClasses import *
 from DBManager import *
 
 debug = True

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import datetime
+import sys, time, datetime
 import mysql.connector
-from redThumbDataClasses import *
+from dataClasses import *
 
 class DBManager(object):
     redThumbdb = None
@@ -32,53 +32,55 @@ class DBManager(object):
         
         if plant.name is not None:
             if not isinstance(plant.name, str):
-                raise Exception("Plant name must be a string. Got: " + str(type(plant.name)))
+                raise TypeError("Plant name must be a string. Got: " + str(type(plant.name)))
             if not len(plant.name) <= 63:
-                raise Exception("Plant name must be less than 64 characters. Length was " + str(len(plant.name)))
+                raise ValueError("Plant name must be less than 64 characters. Length was " + str(len(plant.name)))
             name = "'" + plant.name + "'"
             variables.append(("name", name))
             
         if plant.waterFrequency is not None:
             if not isinstance(plant.waterFrequency, int):
-                raise Exception("Water frequency must be an int. Got: " + str(type(plant.waterFrequency)))
+                raise TypeError("Water frequency must be an int. Got: " + str(type(plant.waterFrequency)))
             if plant.waterFrequency == 0:
-                raise Exception("Water frequency cannot be 0")
+                raise ValueError("Water frequency cannot be 0")
             variables.append(("water_frequency", plant.waterFrequency))
         
         if plant.waterLength is not None:
             if not isinstance(plant.waterLength, int):
-                raise Exception("Water length must be an int. Got: " + str(type(plant.waterLength)))
+                raise TypeError("Water length must be an int. Got: " + str(type(plant.waterLength)))
             if plant.waterFrequency == 0:
-                raise Exception("Water length cannot be 0")
+                raise ValueError("Water length cannot be 0")
             variables.append(("water_length", plant.waterLength))
         
         if plant.temperature is not None:
             if not (isinstance(plant.temperature, float) or isinstance(plant.temperature, int)):
-                raise Exception("Temperature must be a float or int. Got: " + str(type(plant.temperature)))
+                raise TypeError("Temperature must be a float or int. Got: " + str(type(plant.temperature)))
             variables.append(("temperature", plant.temperature))
         
         if plant.humidity is not None:
             if not (isinstance(plant.humidity, float) or isinstance(plant.humidity, int)):
-                raise Exception("Humidity must be a float or int. Got: " + str(type(plant.humidity)))
+                raise TypeError("Humidity must be a float or int. Got: " + str(type(plant.humidity)))
             variables.append(("humidity", plant.humidity))
             
         if plant.soilMoisture is not None:
+            if not isinstance(plant.soilMoisture, str):
+                raise TypeError("Soil mositure must be a string. Got: " + str(type(plant.soilMoisture)))
             acceptableValues = ["dry", "wet", "water"]
             if not plant.soilMoisture in acceptableValues:
-                raise Exception("Submitted soil moisture value not valid. Expecting {\"dry\", \"wet\", \"water\"} got: " + str(plant.soilMoisture))
+                raise ValueError("Submitted soil moisture value not valid. Expecting {\"dry\", \"wet\", \"water\"} got: " + str(plant.soilMoisture))
             soilMoisture = "'" + plant.soilMoisture + "'"
             variables.append(("soil_moisture", soilMoisture))
         
         if plant.sunCoverage is not None:
             if not isinstance(plant.sunCoverage, int):
-                raise Exception("Sun coverage must be an int. Got: " + str(type(plant.sunCoverage)))
+                raise TypeError("Sun coverage must be an int. Got: " + str(type(plant.sunCoverage)))
             variables.append(("sun_coverage", plant.sunCoverage))
             
         return variables
     
     def submitPlantType(self, plant):
         if not isinstance(plant, PlantType):
-            raise Exception("Plant must be of type PlantType. Got: " + str(type(plant)))
+            raise TypeError("Plant must be of type PlantType. Got: " + str(type(plant)))
     
         variables = self._getValidPlantVariables(plant)
         nameString = ""
@@ -98,9 +100,9 @@ class DBManager(object):
         
     def updatePlantType(self, plant):
         if not isinstance(plant, PlantType):
-            raise Exception("Plant must be of type PlantType. Got: " + str(type(plant)))
+            raise TypeError("Plant must be of type PlantType. Got: " + str(type(plant)))
         if not isinstance(plant.plantID, int):
-            raise Exception("plantID must be int. Got: " + str(type(plant.plantID)))
+            raise TypeError("plantID must be int. Got: " + str(type(plant.plantID)))
     
         variables = self._getValidPlantVariables(plant)
         updateString = ""
@@ -121,7 +123,7 @@ class DBManager(object):
     
     def fetchPlantType(self, plantID):
         if not isinstance(plantID, int):
-            raise Exception("plantID must be int. Got: " + str(type(plant.plantID)))
+            raise TypeError("plantID must be int. Got: " + str(type(plant.plantID)))
         
         sql = "SELECT * FROM PlantTypes WHERE plant_id=%s" % (str(plantID))
         self.cursor.execute(sql)
@@ -143,7 +145,7 @@ class DBManager(object):
         
     def deletePlantType(self, plantID):
         if not isinstance(plantID, int):
-            raise Exception("plantID must be int. Got: " + str(type(plant.plantID)))
+            raise TypeError("plantID must be int. Got: " + str(type(plant.plantID)))
         
         sql = "DELETE FROM PlantTypes WHERE plant_id=%s" % (str(plantID))
         self.cursor.execute(sql)
@@ -158,21 +160,21 @@ class DBManager(object):
         
         if pot.name is not None:
             if not isinstance(pot.name, str):
-                raise Exception("Pot name must be a string. Got: " + str(type(pot.name)))
+                raise TypeError("Pot name must be a string. Got: " + str(type(pot.name)))
             if not len(pot.name) <= 63:
-                raise Exception("Pot name must be less than 64 characters. Length was " + str(len(pot.name)))
+                raise ValueError("Pot name must be less than 64 characters. Length was " + str(len(pot.name)))
             name = "'" + pot.name + "'"
             variables.append(("name", name))
             
         if pot.potIP is not None:
             if not isinstance(pot.potIP, str):
-                raise Exception("Pot ip must be a string. Got: " + str(type(pot.name)))
+                raise TypeError("Pot ip must be a string. Got: " + str(type(pot.name)))
             potIP = "'" + pot.potIP + "'"
             variables.append(("pot_ip", potIP))
         
         if pot.plantID is not None:
             if not isinstance(pot.plantID, int):
-                raise Exception("Plant ID must be an int. Got: " + str(type(pot.plantID)))
+                raise TypeError("Plant ID must be an int. Got: " + str(type(pot.plantID)))
             variables.append(("plant_id", pot.plantID))
         
         if pot.lastWatered is not None:
@@ -180,13 +182,13 @@ class DBManager(object):
         
         if pot.lowWater is not None:
             if not (isinstance(pot.lowWater, int) or isinstance(pot.lowWater, bool)):
-                raise Exception("Low water must be an int or bool. Got: " + str(type(pot.lowWater)))
+                raise TypeError("Low water must be an int or bool. Got: " + str(type(pot.lowWater)))
             lowWater = str(int(bool(pot.lowWater)))
             variables.append(("low_water", lowWater))
         
         if pot.waterFlag is not None:
             if not (isinstance(pot.waterFlag, int) or isinstance(pot.waterFlag, bool)):
-                raise Exception("Water flag must be an int or bool. Got: " + str(type(pot.waterFlag)))
+                raise TypeError("Water flag must be an int or bool. Got: " + str(type(pot.waterFlag)))
             waterFlag = str(int(bool(pot.waterFlag)))
             variables.append(("water_flag", waterFlag))
             
@@ -194,7 +196,7 @@ class DBManager(object):
     
     def submitPot(self, pot):
         if not isinstance(pot, SmartPot):
-            raise Exception("Pot must be of type SmartPot. Got: " + str(type(pot)))
+            raise TypeError("Pot must be of type SmartPot. Got: " + str(type(pot)))
             
         variables = self._getValidPotVariables(pot)
         nameString = ""
@@ -214,9 +216,9 @@ class DBManager(object):
         
     def updatePot(self, pot):
         if not isinstance(pot, SmartPot):
-            raise Exception("Pot must be of type SmartPot. Got: " + str(type(pot)))
+            raise TypeError("Pot must be of type SmartPot. Got: " + str(type(pot)))
         if not isinstance(pot.potID, int):
-            raise Exception("potID must be int. Got: " + str(type(pot.potID)))
+            raise TypeError("potID must be int. Got: " + str(type(pot.potID)))
     
         variables = self._getValidPotVariables(pot)
         updateString = ""
@@ -237,7 +239,7 @@ class DBManager(object):
     
     def fetchPot(self, potID):
         if not isinstance(potID, int):
-            raise Exception("potID must be int. Got: " + str(type(pot.potID)))
+            raise TypeError("potID must be int. Got: " + str(type(pot.potID)))
         
         sql = "SELECT * FROM SmartPots WHERE pot_id=%s" % (str(potID))
         self.cursor.execute(sql)
@@ -259,7 +261,7 @@ class DBManager(object):
         
     def deletePot(self, potID):
         if not isinstance(potID, int):
-            raise Exception("potID must be int. Got: " + str(type(pot.potID)))
+            raise TypeError("potID must be int. Got: " + str(type(pot.potID)))
         
         sql = "DELETE FROM SmartPots WHERE pot_id=%s" % (str(potID))
         self.cursor.execute(sql)
@@ -272,35 +274,37 @@ class DBManager(object):
         
     def submitPlantData(self, data):
         if not isinstance(data, PlantData):
-            raise Exception("Data must be of type PlantData. Got: " + str(type(plant)))
+            raise TypeError("Data must be of type PlantData. Got: " + str(type(plant)))
     
         variables = []
         
         if data.potID is not None:
             if not isinstance(data.potID, int):
-                raise Exception("Pot ID must be an int. Got: " + str(type(data.potID)))
+                raise TypeError("Pot ID must be an int. Got: " + str(type(data.potID)))
             variables.append(("pot_id", data.potID))
             
         if data.temperature is not None:
             if not (isinstance(data.temperature, float) or isinstance(data.temperature, int)):
-                raise Exception("Temperature must be a float or int. Got: " + str(type(data.temperature)))
+                raise TypeError("Temperature must be a float or int. Got: " + str(type(data.temperature)))
             variables.append(("temperature", data.temperature))
         
         if data.humidity is not None:
             if not (isinstance(data.humidity, float) or isinstance(data.humidity, int)):
-                raise Exception("Humidity must be a float or int. Got: " + str(type(data.humidity)))
+                raise TypeError("Humidity must be a float or int. Got: " + str(type(data.humidity)))
             variables.append(("humidity", data.humidity))
             
         if data.soilMoisture is not None:
+            if not isinstance(data.soilMoisture, str):
+                raise TypeError("Soil mositure must be a string. Got: " + str(type(data.soilMoisture)))
             acceptableValues = ["dry", "wet", "water"]
             if not data.soilMoisture in acceptableValues:
-                raise Exception("Submitted soil moisture value not valid. Expecting {\"dry\", \"wet\", \"water\"} got: " + str(data.soilMoisture))
+                raise ValueError("Submitted soil moisture value not valid. Expecting {\"dry\", \"wet\", \"water\"} got: " + str(data.soilMoisture))
             soilMoisture = "'" + data.soilMoisture + "'"
             variables.append(("soil_moisture", soilMoisture))
         
         if data.sunlight is not None:
             if not (isinstance(data.sunlight, int) or isinstance(data.sunlight, bool)):
-                raise Exception("Sunlight must be an int or bool. Got: " + str(type(data.sunlight)))
+                raise TypeError("Sunlight must be an int or bool. Got: " + str(type(data.sunlight)))
             sunlight = str(int(bool(data.sunlight)))
             variables.append(("sunlight", sunlight))
             
@@ -325,7 +329,7 @@ class DBManager(object):
     
     def fetchCurrentData(self, potID):
         if not isinstance(potID, int):
-            raise Exception("potID must be int. Got: " + str(type(potID)))
+            raise TypeError("potID must be int. Got: " + str(type(potID)))
             
         sql = "SELECT * FROM PlantData WHERE pot_id=%s ORDER BY timestamp DESC LIMIT 1" % (str(potID))
         self.cursor.execute(sql)
@@ -337,9 +341,9 @@ class DBManager(object):
     
     def fetchAllData(self, potID):
         if not isinstance(potID, int):
-            raise Exception("potID must be int. Got: " + str(type(potID)))
+            raise TypeError("potID must be int. Got: " + str(type(potID)))
             
-        sql = "SELECT * FROM PlantData WHERE pot_id=%s" % (str(potID))
+        sql = "SELECT * FROM PlantData WHERE pot_id=%s ORDER BY timestamp DESC" % (str(potID))
         self.cursor.execute(sql)
         plantDataDBList = self.cursor.fetchall()
         
@@ -352,9 +356,9 @@ class DBManager(object):
     
     def fetchRecentData(self, potID, numDataPoints):
         if not isinstance(potID, int):
-            raise Exception("potID must be int. Got: " + str(type(potID)))
+            raise TypeError("potID must be int. Got: " + str(type(potID)))
         if not isinstance(numDataPoints, int):
-            raise Exception("numDataPoints must be int. Got: " + str(type(timestamp)))
+            raise TypeError("numDataPoints must be int. Got: " + str(type(timestamp)))
             
         sql = "SELECT * FROM PlantData WHERE pot_id=%s ORDER BY timestamp DESC LIMIT %s" % (str(potID), str(numDataPoints))
         self.cursor.execute(sql)
@@ -368,10 +372,10 @@ class DBManager(object):
         return plantData
     
     def deleteData(self, timestamp):
-        if not isinstance(timestamp, datetime):
-            raise Exception("Timestamp must be datetime. Got: " + str(type(timestamp)))
+        if not isinstance(timestamp, datetime.datetime):
+            raise TypeError("Timestamp must be datetime. Got: " + str(type(timestamp)))
         
-        sql = "DELETE FROM SmartPots WHERE timestamp=%s" % (str(timestamp))
+        sql = "DELETE FROM PlantData WHERE timestamp='%s'" % (str(timestamp))
         self.cursor.execute(sql)
         self.redThumbdb.commit()
         
@@ -386,4 +390,40 @@ if __name__ == "__main__":
 
     dbManager = DBManager()
     
-    print("no error")
+    dataArray = []
+    
+    dataArray.append(PlantData(None, 3, 1, 1, "dry", True))
+    dataArray.append(PlantData(None, 3, 1.0, 1, "dry", 1))
+    dataArray.append(PlantData(None, 3, 1, 1, "dry", "true"))
+    dataArray.append(PlantData(None, 3, "a", "dry", 1, True))
+    dataArray.append(PlantData(None, 3.0, 1, "dry", 1, True))
+    dataArray.append(PlantData(None, 3, 1, "a", 1, True))
+    dataArray.append(PlantData(None, 3, 1, 1, "1", True))
+    
+    for data in dataArray:
+        try:
+            print data.toString()
+            dbManager.submitPlantData(data)
+            time.sleep(1)
+        except TypeError,e:
+            print ("ERROR (TypeError): " + e.args[0])
+        except ValueError,e:
+            print ("ERROR (ValueError): " + e.args[0])
+        except Exception,e:
+            print ("ERROR (Other): " + e.args[0])
+    
+    print("\nAll data")
+    dataDBList = dbManager.fetchAllData(3)
+    for dataDB in dataDBList:
+        print (dataDB.toString())
+        
+    dataCur = dbManager.fetchCurrentData(3)
+    print ("\nCurrent data: " + dataCur.toString())
+    
+    print("\nLatest two")
+    dataDBList2 = dbManager.fetchRecentData(3, 2)
+    for dataDB in dataDBList2:
+        print (dataDB.toString())
+        
+    for dataDB in dataDBList:
+        dbManager.deleteData(dataDB.timestamp)
