@@ -4,8 +4,12 @@ import socket, sys, time
 import serial
 
 debug = True
+testingMode = True
 
 hubIP = '192.168.0.190'
+
+if testingMode:
+    hubIP = 'localhost'
 
 # Setting up UDP listener
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -66,7 +70,11 @@ while True:
         s.sendto(message, (hubIP, port))
         print ("INFO: Message sent to hub")
     elif buf.split()[0] == "WaterPlant":
-        waterPlant(int(buf.split()[1]))
+        if len(buf.split()):
+            length = 1
+        else:
+            length = int(buf.split()[1])
+        waterPlant(length)
     else:
         print("ERROR: Unknown request: " + buf)
 
