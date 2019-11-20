@@ -29,15 +29,15 @@ timestamp2 = data2[:15]
 dataString2 = data2[16:]
 
 
-# Test 2
-print ("Test 2, are timestamps updating (arduino is connected)")
+# Test 1
+print ("Test 1, are timestamps updating (arduino is connected)")
 if not timestamp1 == timestamp2:
     print ("pass")
 else:
     print ("fail")
 
-# Test 3
-print ("\nTest 3, are both data points valid")
+# Test 2
+print ("\nTest 2, are both data points valid")
 if not isJson(dataString) and isJson(dataString2):
     print ("pass")
 else:
