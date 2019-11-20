@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import serial
+import serial, time
 
 debug = True
 
@@ -34,6 +34,9 @@ while True:
     # If data is available, write to file
     if data != "":
         dataFile = open("data.txt", 'w+')
-        dataFile.write(data)
+        timestamp = str(time.time()) + ""
+        while len(timestamp) < 15:
+            timestamp += "0"
+        dataFile.write(timestamp + " " + data)
         dataFile.close()
         print("INFO: Sensor Data has been writen to file")

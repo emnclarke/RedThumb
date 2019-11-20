@@ -27,14 +27,6 @@ def reqPotData():
     s.sendto(message, (hubIP, port))
     print ("INFO: Data sent to hub")
 
-# Takes photo with camera and sends to hub
-def takePhoto():
-    print ("INFO: Picture requested")
-    #ToDo: Take pictures with the pi
-    #...
-    s.sendto("PictureAck", (hubIP, port))
-    print ("INFO: Picture taken")
-
 # Requests Arduino triggers water pump to water plant by sending 'w' char
 # each 'w' sent turns the pump on for one second
 def waterPlant(length):
@@ -66,8 +58,6 @@ while True:
 
     if buf.split()[0] == "RequestPotData":
         reqPotData()
-    elif buf.split()[0] == "TakePicture":
-        takePhoto()
     elif buf.split()[0] == "WaterPlant":
         waterPlant(int(buf.split()[1]))
     else:

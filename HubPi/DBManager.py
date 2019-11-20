@@ -33,7 +33,7 @@ class DBManager(object):
         variables = []
         
         if plant.name is not None:
-            if not isinstance(plant.name, str):
+            if not (isinstance(plant.name, str) or isinstance(plant.name, unicode)):
                 raise TypeError("Plant name must be a string. Got: " + str(type(plant.name)))
             if not len(plant.name) <= 63:
                 raise ValueError("Plant name must be less than 64 characters. Length was " + str(len(plant.name)))
@@ -65,7 +65,7 @@ class DBManager(object):
             variables.append(("humidity", plant.humidity))
             
         if plant.soilMoisture is not None:
-            if not isinstance(plant.soilMoisture, str):
+            if not (isinstance(plant.soilMoisture, str) or isinstance(plant.soilMoisture, unicode)):
                 raise TypeError("Soil mositure must be a string. Got: " + str(type(plant.soilMoisture)))
             acceptableValues = ["dry", "wet", "water"]
             if not plant.soilMoisture in acceptableValues:
@@ -131,12 +131,18 @@ class DBManager(object):
         self._cursor.execute(sql)
         plantDB = self._cursor.fetchone()
         
+        if plantDB is None:
+            raise MissingPlantTypeError("No plant type of id " + str(plantID))
+        
         return self._convertDBtoPlantType(plantDB)
         
     def fetchPlantTypes(self):
         sql = "SELECT * FROM PlantTypes"
         self._cursor.execute(sql)
         plantDBList = self._cursor.fetchall()
+        
+        if plantDBList is None:
+            raise MissingPlantTypeError("No plant types available")
         
         plants = []
         
@@ -161,7 +167,7 @@ class DBManager(object):
         variables = []
         
         if pot.name is not None:
-            if not isinstance(pot.name, str):
+            if not (isinstance(pot.name, str) or isinstance(pot.name, unicode)):
                 raise TypeError("Pot name must be a string. Got: " + str(type(pot.name)))
             if not len(pot.name) <= 63:
                 raise ValueError("Pot name must be less than 64 characters. Length was " + str(len(pot.name)))
@@ -169,7 +175,7 @@ class DBManager(object):
             variables.append(("name", name))
             
         if pot.potIP is not None:
-            if not isinstance(pot.potIP, str):
+            if not (isinstance(pot.potIP, str) or isinstance(pot.potIP, unicode)):
                 raise TypeError("Pot ip must be a string. Got: " + str(type(pot.name)))
             potIP = "'" + pot.potIP + "'"
             variables.append(("pot_ip", potIP))
@@ -296,7 +302,7 @@ class DBManager(object):
             variables.append(("humidity", data.humidity))
             
         if data.soilMoisture is not None:
-            if not isinstance(data.soilMoisture, str):
+            if not (isinstance(data.soilMoisture, str) or isinstance(data.soilMoisture, unicode)):
                 raise TypeError("Soil mositure must be a string. Got: " + str(type(data.soilMoisture)))
             acceptableValues = ["dry", "wet", "water"]
             if not data.soilMoisture in acceptableValues:
@@ -389,6 +395,8 @@ class DBManager(object):
 
 
 
+
+# For testing purposes
 if __name__ == "__main__":
     # plant = PlantType(6, ":)", 1, 1, 12, 12, "dry", 1)
     # testPot = SmartPot(4, "newpot2", "1.1.1.1", 3, 1, 1, 1)

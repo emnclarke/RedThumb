@@ -39,4 +39,8 @@ class SmartPot(object):
 
 class TooFastError(RuntimeError):
     def __init__(self, arg):
-      self.args = arg
+      self.args = (arg,)
+
+class MissingPlantTypeError(RuntimeError):
+    def __init__(self, arg):
+      self.args = (arg,)

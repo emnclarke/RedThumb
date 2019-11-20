@@ -73,7 +73,7 @@ while True:
                     print ("ERROR: Json object not valid, data not submitted to database")
                 else:
                     jsonData = json.loads(rawData)
-                    plantData = PlantData(None, pot.potID, jsonData["temperature"], jsonData["humidity"], jsonData["soilMoisture"], int(jsonData["sunlight"]))
+                    plantData = PlantData(None, pot.potID, jsonData["temperature"], jsonData["humidity"], str(jsonData["soilMoisture"]), int(jsonData["sunlight"]))
                     
                     redThumbdb.submitPlantData(plantData)
 
@@ -142,8 +142,8 @@ while True:
         # Pot did not reply to data request, timeout
         except socket.timeout:
             print ("ERROR: Pot " + str(pot.potID) + " timeout at ip: " + pot.potIP + ". Continuing to next pot")
-        except:
-            print ("ERROR: Unhandled exception: " + str(sys.exc_info()[0]))
+        except Exception as e:
+            print ("ERROR: Unhandled exception: " + str(e.args[0]))
     
     # Sleep statment that ensures data collection happens every x seconds on the dot, prevents drifting
     print ("\nINFO: Waiting for next data collection. Current interval: " + str(dataCollectionInterval) + "s\n")
