@@ -5,6 +5,7 @@ import serial
 
 debug = True
 testingMode = True
+onMac = True
 
 hubIP = '192.168.0.190'
 
@@ -14,11 +15,15 @@ if testingMode:
 # Setting up UDP listener
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 port = 1854
-server_address = ('192.168.0.191', port)
+server_address = ('172.17.33.4', port)
 s.bind(server_address)
 
-# Setting up serial connection
-serialport = serial.Serial("/dev/ttyACM0", 9600, timeout=1)
+if onMac:
+    # Setting up serial connection
+    serialport = serial.Serial("/dev/cu.usbmodem142401", 9600, timeout=1)
+else:
+    # Setting up serial connection
+    serialport = serial.Serial("/dev/ttyACM0", 9600, timeout=1)
 
 # Requests Arduino triggers water pump to water plant by sending 'w' char
 # each 'w' sent turns the pump on for one second

@@ -124,8 +124,8 @@ public class PlantData {
 
     //Sensor values record sunlight or no sunlight and give us a sunlight hours measurement,
     //This hours value is assumed to be correct and we won't adjust for error.
-    private Double getSunCoverageQuality(int sunCoverageHours) {
-        return (Math.abs(sunCoverageHours - idealSunCoverage) / ((sunCoverageHours + idealSunCoverage) / 2)) * 100;
+    private Double getSunCoverageQuality(double sunCoverageHours) {
+        return 100-(Math.abs(sunCoverageHours - idealSunCoverage) / (idealSunCoverage)) * 100;
     }
 
     //NOTE
@@ -136,21 +136,21 @@ public class PlantData {
         Double tempDiff = idealTemperature - temperature;
         temperature += (Math.abs(tempDiff) > TEMPERATURE_ERROR ? TEMPERATURE_ERROR * (tempDiff > 0 ? 1 : -1) : tempDiff);
 
-        return (Math.abs(temperature - idealTemperature) / ((temperature + idealTemperature) / 2)) * 100;
+        return 100 - ((Math.abs(temperature - idealTemperature) / (idealTemperature) * 100));
     }
 
     private Double getSoilMoistureQuality(double soilMoisture) {
         Double moistDiff = idealSoilMoisture - soilMoisture;
         soilMoisture += (Math.abs(moistDiff) > MOISTURE_ERROR ? MOISTURE_ERROR * (moistDiff > 0 ? 1 : -1) : moistDiff);
 
-        return ((Math.abs(soilMoisture - idealSoilMoisture)) / ((soilMoisture + idealSoilMoisture) / 2)) * 100;
+        return 100 - (((Math.abs(soilMoisture - idealSoilMoisture)) / ((idealSoilMoisture)) * 100));
     }
 
     private Double getHumidityQuality(double humidity) {
         Double humidDiff = idealHumidity - humidity;
         humidity += (Math.abs(humidDiff) > HUMIDITY_ERROR ? HUMIDITY_ERROR * (humidDiff > 0 ? 1 : -1) : humidDiff);
 
-        return (Math.abs((humidity / idealHumidity)) / ((humidity + idealHumidity) / 2)) * 100;
+        return 100 - ((Math.abs((humidity - idealHumidity)) / (idealHumidity)) * 100);
     }
 
     /**
@@ -204,6 +204,10 @@ public class PlantData {
         return maxDate;
     }
 
+    public JSONObject getPlantTypeData(){
+        return plantTypeData;
+    }
+
     /**
      * Finds the most recent data and packages it as an array of ints. (Length 4).
      *
@@ -235,13 +239,13 @@ public class PlantData {
         cal.add(Calendar.DAY_OF_YEAR, -1);
         List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
 
-        int sunCoverage = 0;
-        int humidityTotal = 0;
-        int temperatureTotal = 0;
-        int soilMoistureTotal = 0;
+        double sunCoverage = 0;
+        double humidityTotal = 0;
+        double temperatureTotal = 0;
+        double soilMoistureTotal = 0;
 
         for (int i : plantDataSubset) {
-            sunCoverage += (this.sunLight.get(i)) ? (1 / 60) : 0; //Add a minute if true, else add 0
+            sunCoverage += (this.sunLight.get(i)) ? (1.0 / 60.0) : 0; //Add a minute if true, else add 0
             humidityTotal += getHumidityQuality(this.humidity.get(i));
             temperatureTotal += getTemperatureQuality(this.temperature.get(i));
             soilMoistureTotal += getSoilMoistureQuality(this.soilMoisture.get(i));
@@ -249,6 +253,7 @@ public class PlantData {
         int n = plantDataSubset.size();
         double[] feedData;
         if (n > 0) {
+            System.out.println("Sun Coverage Hours: " + sunCoverage);
             double sunCoverageQuality = getSunCoverageQuality(sunCoverage);
             double humidityQuality = humidityTotal / n;
             double temperatureQuality = temperatureTotal / n;

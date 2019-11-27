@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PlantFeedData {
-    private int potID;
+    private String potID;
     private String plantType;
 
     private double sunlight;
@@ -21,20 +21,27 @@ public class PlantFeedData {
     private double humidityQuality;
     private double soilMoistureQuality;
 
-    public PlantFeedData(double[] feedData, double[] feedQualities, int potID, String plantType) {
-        this.potID = potID;
-        this.plantType = plantType;
+    public PlantFeedData(PlantData plantData) {
 
+        this.potID = (plantData.getPlantTypeData()).get("name").toString();
+        this.plantType = (plantData.getPlantTypeData().get("plant_type")).toString();
+
+        double[] feedData = plantData.getFeedData();
+        double[] feedQualities = plantData.getFeedDataQualities();
+        //(Sunlight, Humidity,Temperature,SoilMoisture).
         this.sunlight = feedData[0];
-        this.temperature = feedData[1];
-        this.humidity = feedData[2];
+        this.temperature = feedData[2];
+        this.humidity = feedData[1];
         this.soilMoisture = feedData[3];
 
         if(feedQualities != null) {
+
             this.sunlightQuality = feedQualities[0];
-            this.temperatureQuality = feedQualities[1];
-            this.humidityQuality = feedQualities[2];
+            this.temperatureQuality = feedQualities[2];
+            this.humidityQuality = feedQualities[1];
             this.soilMoistureQuality = feedQualities[3];
+            System.out.println(temperatureQuality);
+            System.out.println(humidityQuality);
         }else{
             this.sunlightQuality = 0.0;
             this.temperatureQuality = 0.0;
@@ -48,7 +55,7 @@ public class PlantFeedData {
         return plantType;
     }
 
-    public int getPotID() {
+    public String getPotID() {
         return potID;
     }
 
@@ -90,7 +97,7 @@ public class PlantFeedData {
         for (int i = 0; i < n; i++) {
             PlantData plantData = new PlantData(createGoodPlantData(i), createGoodPlantTypeData());
 
-            plantFeedDataArrayList.add(new PlantFeedData(plantData.getFeedData(), plantData.getFeedDataQualities(), i, "Fake Plant Type"));
+            plantFeedDataArrayList.add(new PlantFeedData(plantData));
         }
         return plantFeedDataArrayList;
     }
@@ -98,8 +105,13 @@ public class PlantFeedData {
     private static JSONObject createGoodPlantTypeData() {
         //Create dummy object PlantTypeData
         JSONObject plantTypeDataGood = new JSONObject();
-        plantTypeDataGood.put("plant_type", 1);
-        plantTypeDataGood.put("name", "Testhead Palm");
+        Random rand = new Random();
+        int rand1 = rand.nextInt(5);
+        int rand2 = rand.nextInt(5);
+        String[] potNames = {"Kitchen Pot","Bathroom Pot","Hallway Pot","Garage Pot","Livingroom Pot"};
+        String[] plantTypeNames = {"Sunflower","Moonflower","Tomato","Bean Sprout","Cactus"};
+        plantTypeDataGood.put("plant_type", potNames[rand1]);
+        plantTypeDataGood.put("name", plantTypeNames[rand2]);
         plantTypeDataGood.put("sun_coverage", new Double(8));
         plantTypeDataGood.put("temperature", new Double(23));
         plantTypeDataGood.put("humidity", new Double(50));
@@ -110,7 +122,7 @@ public class PlantFeedData {
 
     private static JSONObject[] createGoodPlantData(int i) {
         Random rand = new Random();
-        int dataPoints = rand.nextInt(50) + 8;
+        int dataPoints = rand.nextInt(500) + 8;
         JSONObject[] JSONarr = new JSONObject[dataPoints];
         for (int j = 0; j < dataPoints; j++) {
             i += j;
@@ -118,10 +130,10 @@ public class PlantFeedData {
             JSONObject plantDataRawGood = new JSONObject();
             plantDataRawGood.put("time", date);
             plantDataRawGood.put("pot_id", new Integer(i+j));
-            plantDataRawGood.put("sunlight", new Boolean(i % 2 == 1));
-            plantDataRawGood.put("temperature", new Double(23.1 + (i+j+1)));
-            plantDataRawGood.put("humidity", new Double(50.6 + (i+j+4)));
-            plantDataRawGood.put("soil_moisture", new Double(89.2 + (i+j)));
+            plantDataRawGood.put("sunlight", new Boolean(true));
+            plantDataRawGood.put("temperature", new Double(23.1));
+            plantDataRawGood.put("humidity", new Double(40.6 ));
+            plantDataRawGood.put("soil_moisture", new Double(69.2 ));
             JSONarr[j] = plantDataRawGood;
         }
         return JSONarr;
