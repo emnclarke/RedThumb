@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView plantDataRV = (RecyclerView) findViewById(R.id.plantDataRV);
 
         // Initialize contacts
-        plantFeed = PlantFeedData.createDummyPlants(12);
+        plantFeed = PlantFeedData.createDummyPlants(1);
         // Create adapter passing in the sample user data
          PlantDataAdapter adapter = new PlantDataAdapter(plantFeed);
         // Attach the adapter to the recyclerview to populate items

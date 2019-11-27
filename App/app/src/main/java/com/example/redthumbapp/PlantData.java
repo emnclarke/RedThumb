@@ -124,7 +124,7 @@ public class PlantData {
 
     //Sensor values record sunlight or no sunlight and give us a sunlight hours measurement,
     //This hours value is assumed to be correct and we won't adjust for error.
-    private Double getSunCoverageQuality(int sunCoverageHours) {
+    private Double getSunCoverageQuality(double sunCoverageHours) {
         return (Math.abs(sunCoverageHours - idealSunCoverage) / ((sunCoverageHours + idealSunCoverage) / 2)) * 100;
     }
 
@@ -204,6 +204,10 @@ public class PlantData {
         return maxDate;
     }
 
+    public JSONObject getPlantTypeData(){
+        return plantTypeData;
+    }
+
     /**
      * Finds the most recent data and packages it as an array of ints. (Length 4).
      *
@@ -235,10 +239,10 @@ public class PlantData {
         cal.add(Calendar.DAY_OF_YEAR, -1);
         List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
 
-        int sunCoverage = 0;
-        int humidityTotal = 0;
-        int temperatureTotal = 0;
-        int soilMoistureTotal = 0;
+        double sunCoverage = 0;
+        double humidityTotal = 0;
+        double temperatureTotal = 0;
+        double soilMoistureTotal = 0;
 
         for (int i : plantDataSubset) {
             sunCoverage += (this.sunLight.get(i)) ? (1 / 60) : 0; //Add a minute if true, else add 0
@@ -249,6 +253,7 @@ public class PlantData {
         int n = plantDataSubset.size();
         double[] feedData;
         if (n > 0) {
+            System.out.println("Sun Coverage Hours: " + sunCoverage);
             double sunCoverageQuality = getSunCoverageQuality(sunCoverage);
             double humidityQuality = humidityTotal / n;
             double temperatureQuality = temperatureTotal / n;
