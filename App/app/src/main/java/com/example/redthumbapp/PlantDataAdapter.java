@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -72,9 +73,10 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         ProgressBar progressBarSoilMoisture = viewHolder.progressBarSoilMositure;
         progressBarSoilMoisture.setMax(100);
         progressBarSoilMoisture.setProgress((int) plantData.getSoilMoistureQuality());
-        System.out.println("Soil Mositure Quality: " + plantData.getSoilMoistureQuality());
+        System.out.println("Soil Moisture Quality: " + plantData.getSoilMoistureQuality());
 
-        Button historyButton = viewHolder.historyButton;
+        ImageButton historyButton = viewHolder.historyButton;
+
 
     }
 
@@ -103,7 +105,7 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         public ProgressBar progressBarSoilMositure;
 
         //Button
-        public Button historyButton;
+        public ImageButton historyButton;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -120,6 +122,7 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
             textSoilMoisture = (TextView) itemView.findViewById(R.id.textSoilMoisture);
             imagePlant = (ImageView) itemView.findViewById(R.id.plantImageView);
             imagePlant.setImageResource(R.drawable.ic_sprout);
+            historyButton = (ImageButton) itemView.findViewById(R.id.historyButton);
 
             progressBarSunlight = (ProgressBar) itemView.findViewById(R.id.progressBarSunlight);
             progressBarTemperature = (ProgressBar) itemView.findViewById(R.id.progressBarTemperature);

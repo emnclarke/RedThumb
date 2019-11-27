@@ -122,7 +122,7 @@ public class PlantFeedData {
 
     private static JSONObject[] createGoodPlantData(int i) {
         Random rand = new Random();
-        int dataPoints = rand.nextInt(50) + 8;
+        int dataPoints = rand.nextInt(500) + 8;
         JSONObject[] JSONarr = new JSONObject[dataPoints];
         for (int j = 0; j < dataPoints; j++) {
             i += j;
@@ -130,10 +130,10 @@ public class PlantFeedData {
             JSONObject plantDataRawGood = new JSONObject();
             plantDataRawGood.put("time", date);
             plantDataRawGood.put("pot_id", new Integer(i+j));
-            plantDataRawGood.put("sunlight", new Boolean(i % 2 == 1));
+            plantDataRawGood.put("sunlight", new Boolean(true));
             plantDataRawGood.put("temperature", new Double(23.1));
-            plantDataRawGood.put("humidity", new Double(50.6 + (i+j+4)));
-            plantDataRawGood.put("soil_moisture", new Double(89.2 + (i+j)));
+            plantDataRawGood.put("humidity", new Double(40.6 ));
+            plantDataRawGood.put("soil_moisture", new Double(69.2 ));
             JSONarr[j] = plantDataRawGood;
         }
         return JSONarr;
