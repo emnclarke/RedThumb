@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class PlantFeedData {
+    public PlantData plantData;
     private String potID;
     private String plantType;
 
@@ -22,6 +23,8 @@ public class PlantFeedData {
     private double soilMoistureQuality;
 
     public PlantFeedData(PlantData plantData) {
+
+        this.plantData = plantData;
 
         this.potID = (plantData.getPlantTypeData()).get("name").toString();
         this.plantType = (plantData.getPlantTypeData().get("plant_type")).toString();
@@ -40,8 +43,6 @@ public class PlantFeedData {
             this.temperatureQuality = feedQualities[2];
             this.humidityQuality = feedQualities[1];
             this.soilMoistureQuality = feedQualities[3];
-            System.out.println(temperatureQuality);
-            System.out.println(humidityQuality);
         }else{
             this.sunlightQuality = 0.0;
             this.temperatureQuality = 0.0;

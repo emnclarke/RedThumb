@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     ArrayList<PlantFeedData> plantFeed;
     @Override
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView plantDataRV = (RecyclerView) findViewById(R.id.plantDataRV);
 
         // Initialize contacts
-        plantFeed = PlantFeedData.createDummyPlants(1);
+        plantFeed = PlantFeedData.createDummyPlants(12);
         // Create adapter passing in the sample user data
          PlantDataAdapter adapter = new PlantDataAdapter(plantFeed);
         // Attach the adapter to the recyclerview to populate items
@@ -51,4 +52,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onClick(View v) {
+        System.out.println("Clicky Click Click");
+    }
 }

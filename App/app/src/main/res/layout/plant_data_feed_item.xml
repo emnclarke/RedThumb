@@ -167,6 +167,8 @@
                         android:id="@+id/historyButton"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_bar_chart"
                         android:text="Button" />
                 </LinearLayout>
             </LinearLayout>

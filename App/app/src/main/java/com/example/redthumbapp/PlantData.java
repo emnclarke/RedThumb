@@ -253,17 +253,18 @@ public class PlantData {
         int n = plantDataSubset.size();
         double[] feedData;
         if (n > 0) {
-            System.out.println("Sun Coverage Hours: " + sunCoverage);
+//            System.out.println("Sun Coverage Hours: " + sunCoverage);
             double sunCoverageQuality = getSunCoverageQuality(sunCoverage);
             double humidityQuality = humidityTotal / n;
             double temperatureQuality = temperatureTotal / n;
             double soilMoistureQuality = soilMoistureTotal / n;
 
-            feedData = new double[4];
-            feedData[0] = sunCoverageQuality;
-            feedData[1] = humidityQuality;
-            feedData[2] = temperatureQuality;
-            feedData[3] = soilMoistureQuality;
+            feedData = new double[5];
+            feedData[0] = (double)Math.round(sunCoverageQuality * 100d) / 100d;
+            feedData[1] = (double)Math.round(humidityQuality * 100d) / 100d;
+            feedData[2] = (double)Math.round(temperatureQuality * 100d) / 100d;
+            feedData[3] = (double)Math.round(soilMoistureQuality * 100d) / 100d;
+            feedData[4] = (double)Math.round(sunCoverage * 100d) / 100d;
         } else {
             feedData = null;
         }
@@ -296,5 +297,86 @@ public class PlantData {
         return historicalFeedData;
     }
 
+    public double[] getDailyAverages(){
+        int maxDateIndex = getMostRecentDateIndex();
+        double[] average = new double[3];
+        //Get date 24 prior to the maxDate.
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this.getMostRecentDate());
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
+        double humidityTotal = 0;
+        double temperatureTotal = 0;
+        double soilMoistureTotal = 0;
+        for (int i : plantDataSubset) {
+            humidityTotal += this.humidity.get(i);
+            temperatureTotal += this.temperature.get(i);
+            soilMoistureTotal += this.soilMoisture.get(i);
+        }
+
+        average[0] = (double)Math.round(temperatureTotal/plantDataSubset.size() *100d) /100d;
+        average[1] = (double)Math.round(humidityTotal/plantDataSubset.size() *100d) /100d;
+        average[2] = (double)Math.round(soilMoistureTotal/plantDataSubset.size() *100d) /100d;
+
+        return average;
+    }
+
+    public double[] getDailyMaximums(){
+        int maxDateIndex = getMostRecentDateIndex();
+        double[] maxs = new double[3];
+        //Get date 24 prior to the maxDate.
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this.getMostRecentDate());
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
+        double humidityMax = this.humidity.get(plantDataSubset.get(0));
+        double temperatureMax = this.temperature.get(plantDataSubset.get(0));;
+        double soilMoistureMax = this.soilMoisture.get(plantDataSubset.get(0));;
+        for (int i : plantDataSubset) {
+            if(this.humidity.get(i) > humidityMax){
+                humidityMax = this.humidity.get(i);
+            }
+            if(this.temperature.get(i) > temperatureMax){
+                temperatureMax = this.temperature.get(i);
+            }
+            if(this.soilMoisture.get(i) > soilMoistureMax){
+                soilMoistureMax = this.soilMoisture.get(i);
+            }
+        }
+        maxs[0] = temperatureMax;
+        maxs[1] = humidityMax;
+        maxs[2] = soilMoistureMax;
+
+        return maxs;
+    }
+
+    public double[] getDailyMinimums(){
+        int maxDateIndex = getMostRecentDateIndex();
+        double[] mins = new double[3];
+        //Get date 24 prior to the maxDate.
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this.getMostRecentDate());
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
+        double humidityMin = this.humidity.get(plantDataSubset.get(0));
+        double temperatureMin = this.temperature.get(plantDataSubset.get(0));;
+        double soilMoistureMin = this.soilMoisture.get(plantDataSubset.get(0));;
+        for (int i : plantDataSubset) {
+            if(this.humidity.get(i) < humidityMin){
+                humidityMin = this.humidity.get(i);
+            }
+            if(this.temperature.get(i) < temperatureMin){
+                temperatureMin = this.temperature.get(i);
+            }
+            if(this.soilMoisture.get(i) > soilMoistureMin){
+                soilMoistureMin = this.soilMoisture.get(i);
+            }
+        }
+        mins[0] = temperatureMin;
+        mins[1] = humidityMin;
+        mins[2] = soilMoistureMin;
+
+        return mins;
+    }
 
 }

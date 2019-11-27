@@ -1,6 +1,7 @@
 package com.example.redthumbapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ import java.util.List;
 public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.ViewHolder> {
 
     @Override
-    public PlantDataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PlantDataAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)  {
 
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -58,24 +59,26 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         ProgressBar progressBarSunlight = viewHolder.progressBarSunlight;
         progressBarSunlight.setMax(100);
         progressBarSunlight.setProgress((int) plantData.getSunlightQuality());
-        System.out.println("Sunlight Quality: " + plantData.getSunlightQuality());
+//        System.out.println("Sunlight Quality: " + plantData.getSunlightQuality());
 
         ProgressBar progressBarTemperature = viewHolder.progressBarTemperature;
         progressBarTemperature.setMax(100);
         progressBarTemperature.setProgress((int) plantData.getTemperatureQuality());
-        System.out.println("Temperature Quality: " + plantData.getTemperatureQuality());
+//        System.out.println("Temperature Quality: " + plantData.getTemperatureQuality());
 
         ProgressBar progressBarHumidity = viewHolder.progressBarHumidity;
         progressBarHumidity.setMax(100);
         progressBarHumidity.setProgress((int) plantData.getHumidityQuality());
-        System.out.println("Humidity Quality: " + plantData.getHumidityQuality());
+//        System.out.println("Humidity Quality: " + plantData.getHumidityQuality());
 
         ProgressBar progressBarSoilMoisture = viewHolder.progressBarSoilMositure;
         progressBarSoilMoisture.setMax(100);
         progressBarSoilMoisture.setProgress((int) plantData.getSoilMoistureQuality());
-        System.out.println("Soil Moisture Quality: " + plantData.getSoilMoistureQuality());
+//        System.out.println("Soil Moisture Quality: " + plantData.getSoilMoistureQuality());
 
         ImageButton historyButton = viewHolder.historyButton;
+
+
 
 
     }
@@ -88,7 +91,7 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
 
     // Provide a direct reference to each of the views within a data item
 // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView textPlantID;
@@ -128,6 +131,46 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
             progressBarTemperature = (ProgressBar) itemView.findViewById(R.id.progressBarTemperature);
             progressBarHumidity = (ProgressBar) itemView.findViewById(R.id.progressBarHumidity);
             progressBarSoilMositure = (ProgressBar) itemView.findViewById(R.id.progressBarSoilMoisture);
+
+            historyButton.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Intent intent = new Intent (v.getContext(), HistoricalPlantView.class);
+            //Title Block
+            intent.putExtra("plantTitle",plantDataList.get(position).getPotID());
+            intent.putExtra("plantType",plantDataList.get(position).getPlantType());
+
+            //Sunlight Data
+            intent.putExtra("dailySunlightHours",Double.toString(plantDataList.get(position).plantData.getFeedDataQualities()[4]));
+            intent.putExtra("dailySunlightHoursReq",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("sun_coverage")).toString());
+            //Calculate Quality Index for display
+            intent.putExtra("sunlightQualityIndex",getIndexQualityString(plantDataList.get(position).getSunlightQuality()));
+
+            //Temperature Data
+            intent.putExtra("temperatureAverage",Double.toString(plantDataList.get(position).plantData.getDailyAverages()[0]));
+            intent.putExtra("temperatureMax",Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[0]));
+            intent.putExtra("temperatureMin",Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[0]));
+            intent.putExtra("idealTemperature",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("temperature")).toString());
+            intent.putExtra("temperatureQuality",getIndexQualityString(plantDataList.get(position).getTemperatureQuality()));
+
+            //Humidity Data
+            intent.putExtra("humidityAverage",Double.toString(plantDataList.get(position).plantData.getDailyAverages()[1]));
+            intent.putExtra("humidityMax",Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[1]));
+            intent.putExtra("humidityMin",Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[1]));
+            intent.putExtra("idealHumidity",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("humidity")).toString());
+            intent.putExtra("humidityQuality",getIndexQualityString(plantDataList.get(position).getHumidityQuality()));
+
+            //Soil Moisture Data
+            intent.putExtra("soilMoistureAverage",Double.toString(plantDataList.get(position).plantData.getDailyAverages()[2]));
+            intent.putExtra("soilMoistureMax",Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[2]));
+            intent.putExtra("soilMoistureMin",Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[2]));
+            intent.putExtra("idealSoilMoisture",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("soil_moisture")).toString());
+            intent.putExtra("soilMoistureQuality",getIndexQualityString(plantDataList.get(position).getSoilMoistureQuality()));
+
+            v.getContext().startActivity(intent);
         }
     }
 
@@ -139,4 +182,21 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         this.plantDataList = plantDataList;
     }
 
+    private String getIndexQualityString(double quality){
+        if(quality >= 100.0){
+            return "Perfect";
+        }
+        if(quality >= 90.0){
+            return "Great";
+        }
+        if(quality >= 75.0){
+            return "Good";
+        }
+        if(quality >= 50.0){
+            return "Fair";
+        }
+        else{
+            return "Poor";
+        }
+    }
 }
