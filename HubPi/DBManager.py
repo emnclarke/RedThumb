@@ -22,14 +22,19 @@ class DBManager(object):
 
     # initializes all the tables if they don't already exist
     def __createTables(self):
+        """createTables initializes 'SmartPots', 'PlantTypes', and 'PlantData' tables if they do not exist already. """
+
         self._cursor.execute("CREATE TABLE IF NOT EXISTS SmartPots (pot_id int(11) NOT NULL AUTO_INCREMENT, name tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no_name', pot_ip tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.0.0.0', plant_type int(11) NOT NULL DEFAULT 1, last_watered date DEFAULT NULL, low_water tinyint(1) NOT NULL DEFAULT 0, water_flag tinyint(1) NOT NULL DEFAULT 0, PRIMARY KEY (pot_id)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
         self._cursor.execute("CREATE TABLE IF NOT EXISTS PlantTypes (plant_type int(11) NOT NULL AUTO_INCREMENT,name tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no_name',water_frequency int(11) NOT NULL DEFAULT 1,water_length int(11) NOT NULL DEFAULT 1,temperature float NOT NULL DEFAULT 20,humidity float NOT NULL DEFAULT 40,soil_moisture tinytext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'wet',sun_coverage int(11) NOT NULL DEFAULT 6,PRIMARY KEY (plant_type)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
         self._cursor.execute("CREATE TABLE IF NOT EXISTS PlantData (time timestamp NOT NULL DEFAULT current_timestamp(), pot_id int(11) NOT NULL, temperature float DEFAULT NULL, humidity float DEFAULT NULL, soil_moisture tinytext COLLATE utf8mb4_unicode_ci DEFAULT NULL, sunlight tinyint(1) DEFAULT NULL, PRIMARY KEY (time)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci")
-    
-    
+
+
+
+
     # Plant type methods
-    
     def _getValidPlantVariables(self, plant):
+        """getValidPlantVariables determines whether the plant information """
+
         variables = []
         
         if plant.name is not None:
@@ -158,11 +163,12 @@ class DBManager(object):
         sql = "DELETE FROM PlantTypes WHERE plant_id=%s" % (str(plantID))
         self._cursor.execute(sql)
         self._redThumbdb.commit()
-    
-    
-    
+
+
+
+
+
     # Pot methods
-    
     def _getValidPotVariables(self, pot):
         variables = []
         
@@ -277,9 +283,9 @@ class DBManager(object):
     
     
     
-    
+
+
     # Plant data methods
-        
     def submitPlantData(self, data):
         if not isinstance(data, PlantData):
             raise TypeError("Data must be of type PlantData. Got: " + str(type(plant)))
@@ -417,7 +423,7 @@ if __name__ == "__main__":
     for data in dataArray:
         while True:
             try:
-                print data.toString()
+                print (data.toString())
                 dbManager.submitPlantData(data)
                 break
             except TooFastError:
