@@ -5,7 +5,7 @@ import serial
 
 debug = True
 
-hubIP = '192.168.0.190'
+hubIP = '10.0.0.71'
 
 # Setting up UDP listener
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

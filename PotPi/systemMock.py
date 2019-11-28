@@ -10,7 +10,7 @@ port = 1854
 server_address = ('localhost', port)
 s.bind(server_address)
 
-potIP = "172.17.33.4"
+potIP = '10.0.0.72'
 
 # Json validator
 def isJson(myjson):
