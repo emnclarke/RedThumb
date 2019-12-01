@@ -19,19 +19,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView plantDataRV = (RecyclerView) findViewById(R.id.plantDataRV);
+        //Load plantFeed
 
-        // Initialize contacts
-        plantFeed = PlantFeedData.createDummyPlants(12);
-        // Create adapter passing in the sample user data
-         PlantDataAdapter adapter = new PlantDataAdapter(plantFeed);
-        // Attach the adapter to the recyclerview to populate items
-        plantDataRV.setAdapter(adapter);
-        // Set layout manager to position the items
-        plantDataRV.setLayoutManager(new LinearLayoutManager(this));
-        // That's all!
+        //Attempt to load view based on plantFeed
+        loadPlantDataView();
+
     }
 
+    private void loadPlantData(){
+    //Load plant data
+
+
+    }
+    private void reloadPlantData(){
+        //Force a load of plant Data
+
+
+    }
+    private void loadPlantDataView(){
+        RecyclerView plantDataRV = (RecyclerView) findViewById(R.id.plantDataRV);
+
+        //Attempt to load plant data;
+
+        if(plantFeed != null) {
+            PlantDataAdapter adapter = new PlantDataAdapter(plantFeed);
+            plantDataRV.setAdapter(adapter);
+            plantDataRV.setLayoutManager(new LinearLayoutManager(this));
+        }else{
+            //No plant data loaded case
+
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.settings_menu, menu);
@@ -45,6 +63,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.settings:
                 //TODO:Navigate to settings screen
                 break;
+            case R.id.loadFakeData:
+                plantFeed = PlantFeedData.createDummyPlants(12);
+                loadPlantDataView();
+                break;
+            case R.id.forceLoadData:
+                reloadPlantData();
+                loadPlantDataView();
+
             default:
                 return super.onOptionsItemSelected(item);
         }
