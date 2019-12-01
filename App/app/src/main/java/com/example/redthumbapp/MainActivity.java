@@ -3,6 +3,7 @@ package com.example.redthumbapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -24,16 +25,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Attempt to load view based on plantFeed
         loadPlantDataView();
 
+        final SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipeLayout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                loadPlantDataView();
+            }
+        });
+
     }
 
     private void loadPlantData(){
     //Load plant data
+        MessageSender messageSender = new MessageSender();
+        String message = "requestPots";
+        //Send Data Request
+        messageSender.execute(message);
 
 
     }
     private void reloadPlantData(){
         //Force a load of plant Data
-
+        MessageSender messageSender = new MessageSender();
+        String message = "requestPots";
+        //Send Data Request
+        messageSender.execute(message);
 
     }
     private void loadPlantDataView(){
@@ -80,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        System.out.println("Clicky Click Click");
     }
+
+
 }
