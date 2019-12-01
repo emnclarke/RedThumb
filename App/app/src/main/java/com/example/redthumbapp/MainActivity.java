@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch(item.getItemId()) {
             case R.id.settings:
-                //TODO:Navigate to settings screen
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.loadFakeData:
                 plantFeed = PlantFeedData.createDummyPlants(12);
