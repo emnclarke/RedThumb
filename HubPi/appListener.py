@@ -165,4 +165,5 @@ while True:
 
 # "updatePot" - Updates plant type, example below. Any value that different from what is in database will be changed. Null values are ignored
 # "10.0.0.70 updatePot {"pot_id": 5, "name": "aaab123bba", "pot_ip": null, "plant_id": 2, "last_watered": null, "low_water": null, "water_flag": null}"
+
 # "deletePot 5" - Deletes specified pot
