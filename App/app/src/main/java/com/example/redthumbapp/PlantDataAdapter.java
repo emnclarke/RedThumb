@@ -2,7 +2,6 @@ package com.example.redthumbapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -54,9 +51,48 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         textHumidity.setText((double) Math.round(plantData.getHumidity() * 100d) / 100d + "%");
         TextView textSoilMoisture = viewHolder.textSoilMoisture;
         textSoilMoisture.setText((double) Math.round(plantData.getSoilMoisture() * 100d) / 100d + "%");
-        ImageView imagePlant = viewHolder.imagePlant;
 
+        //Find a plant Icon based on the PotID
+        //This means a pot will always have the same icon
+        ImageView imagePlant = viewHolder.imagePlant;
+        int plantIcon = (Integer.valueOf(plantData.getPotIDInteger()) % 11);
+        switch(plantIcon) {
+            case 0:
+                imagePlant.setImageResource(R.drawable.ic_plant_0);
+                break;
+            case 1:
+                imagePlant.setImageResource(R.drawable.ic_plant_1);
+                break;
+            case 2:
+                imagePlant.setImageResource(R.drawable.ic_plant_2);
+                break;
+            case 3:
+                imagePlant.setImageResource(R.drawable.ic_plant_3);
+                break;
+            case 4:
+                imagePlant.setImageResource(R.drawable.ic_plant_4);
+                break;
+            case 5:
+                imagePlant.setImageResource(R.drawable.ic_plant_5);
+                break;
+            case 6:
+                imagePlant.setImageResource(R.drawable.ic_plant_6);
+                break;
+            case 7:
+                imagePlant.setImageResource(R.drawable.ic_plant_7);
+                break;
+            case 8:
+                imagePlant.setImageResource(R.drawable.ic_plant_8);
+                break;
+            case 9:
+                imagePlant.setImageResource(R.drawable.ic_plant_9);
+                break;
+            case 10:
+                imagePlant.setImageResource(R.drawable.ic_plant_10);
+                break;
+        }
         ProgressBar progressBarSunlight = viewHolder.progressBarSunlight;
+
         progressBarSunlight.setMax(100);
         progressBarSunlight.setProgress((int) plantData.getSunlightQuality());
 //        System.out.println("Sunlight Quality: " + plantData.getSunlightQuality());
@@ -170,6 +206,9 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
             intent.putExtra("idealSoilMoisture",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("soil_moisture")).toString());
             intent.putExtra("soilMoistureQuality",getIndexQualityString(plantDataList.get(position).getSoilMoistureQuality()));
 
+            //Pot Data
+            intent.putExtra("lastWatered", plantDataList.get(position).getLastWatered());
+            intent.putExtra("pot_id_int",plantDataList.get(position).getPotIDInteger());
             v.getContext().startActivity(intent);
         }
     }
