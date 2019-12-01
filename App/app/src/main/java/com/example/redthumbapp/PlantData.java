@@ -20,7 +20,11 @@ public class PlantData {
     private JSONObject[] plantDataRaw;
     private JSONObject plantTypeData;
 
-    //Amount of indivual datapoints in the plantData set.
+    private String potName;
+    private String plantType;
+    private Date lastWatered;
+    private int potID;
+    //Amount of individual datapoints in the plantData set.
     private int datapoints;
 
     //Each of the following are columns in the database.
@@ -50,7 +54,7 @@ public class PlantData {
      * @param plantDataRaw:  raw data obtained from the database
      * @param plantTypeData: plant type data obtained from the database
      */
-    public PlantData(JSONObject[] plantDataRaw, JSONObject plantTypeData) {
+    public PlantData(JSONObject[] plantDataRaw, JSONObject plantTypeData, JSONObject potData) {
         this.datapoints = plantDataRaw.length;
         this.plantDataRaw = plantDataRaw;
         this.plantTypeData = plantTypeData;
@@ -64,7 +68,7 @@ public class PlantData {
         int newDataPoints = datapoints;
         for (int i = 0; i < newDataPoints; i++) {
             if (plantDataRaw[i].get("time") == null) {
-                //A date is required!
+                //A date is required! (Without this, the datapoint is useless)
                 datapoints--;
                 if (datapoints <= 0) {
                     throw new IllegalArgumentException("Atleast one JSONObject must be valid!");
@@ -82,6 +86,13 @@ public class PlantData {
         this.idealHumidity = (double) plantTypeData.get("humidity");
         this.idealTemperature = (double) plantTypeData.get("temperature");
         this.idealSoilMoisture = (double) plantTypeData.get("soil_moisture");
+        this.plantType = (String) (plantTypeData.get("name"));
+
+
+        //Pot data
+        this.potName = (String) (potData.get("name"));
+        this.lastWatered = (Date) potData.get("last_watered");
+        this.potID = (int) potData.get("pot_id");
     }
 
     /**
@@ -93,6 +104,24 @@ public class PlantData {
         return datapoints;
     }
 
+    /**
+     * A simple getting for the plantType.
+     * @return Plant Type as a string
+     */
+    public String getPlantType(){ return this.plantType; }
+
+    /**
+     * A simple getter for the plantName.
+     * @return Plant name as a string
+     */
+    public String getPotName(){ return this.potName; }
+
+    public Date getLastWatered(){
+        return lastWatered;
+    }
+    public int getPotID(){
+        return this.potID;
+    }
     /**
      * Adds new data to the plantData set, values with matching dates cannot be added.
      *
@@ -131,6 +160,8 @@ public class PlantData {
     //NOTE
     //Quality values are adjusted by the error of the sensor,
     //if the value is within the error of the sensor it gets 100% quality.
+
+    //This is done by flooring the value to the idealValue within the sensor error
 
     private Double getTemperatureQuality(double temperature) {
         Double tempDiff = idealTemperature - temperature;
@@ -297,6 +328,10 @@ public class PlantData {
         return historicalFeedData;
     }
 
+    /**
+     *
+     * @return Double length 3 (Temperature Average, Humidity Average, Soil Moisture Average)
+     */
     public double[] getDailyAverages(){
         int maxDateIndex = getMostRecentDateIndex();
         double[] average = new double[3];
@@ -321,6 +356,10 @@ public class PlantData {
         return average;
     }
 
+    /**
+     *
+     * @return Double length 3 (Temperature Max,
+     */
     public double[] getDailyMaximums(){
         int maxDateIndex = getMostRecentDateIndex();
         double[] maxs = new double[3];
@@ -378,5 +417,6 @@ public class PlantData {
 
         return mins;
     }
+
 
 }

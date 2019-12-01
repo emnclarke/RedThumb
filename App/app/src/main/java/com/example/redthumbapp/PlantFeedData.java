@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Random;
 
 public class PlantFeedData {
@@ -26,8 +27,8 @@ public class PlantFeedData {
 
         this.plantData = plantData;
 
-        this.potID = (plantData.getPlantTypeData()).get("name").toString();
-        this.plantType = (plantData.getPlantTypeData().get("plant_type")).toString();
+        this.potID = plantData.getPotName();
+        this.plantType = plantData.getPlantType();
 
         double[] feedData = plantData.getFeedData();
         double[] feedQualities = plantData.getFeedDataQualities();
@@ -56,12 +57,34 @@ public class PlantFeedData {
         return plantType;
     }
 
+    public String getPotIDInteger() {
+        return String.valueOf(plantData.getPotID());
+    }
     public String getPotID() {
         return potID;
     }
 
     public double getHumidity() {
         return humidity;
+    }
+
+    public String getLastWatered(){
+        Calendar today = Calendar.getInstance();
+        Calendar lastWatered = Calendar.getInstance();
+        Date todayTime = new Date(Instant.now().toEpochMilli());
+        Date lastWateredTime = plantData.getLastWatered();
+        today.setTime(todayTime);
+        lastWatered.setTime(lastWateredTime);
+        if(today.get(Calendar.DAY_OF_YEAR) == lastWatered.get(Calendar.DAY_OF_YEAR) &&
+                today.get(Calendar.YEAR) == lastWatered.get(Calendar.YEAR)){
+            return "Today";
+        }
+        today.add(Calendar.DAY_OF_YEAR,-1);
+        if(today.get(Calendar.DAY_OF_YEAR) == lastWatered.get(Calendar.DAY_OF_YEAR) &&
+                today.get(Calendar.YEAR) == lastWatered.get(Calendar.YEAR)){
+            return "Yesterday";
+        }
+        return plantData.getLastWatered().toString();
     }
 
     public double getSoilMoisture() {
@@ -96,22 +119,32 @@ public class PlantFeedData {
 
         ArrayList<PlantFeedData> plantFeedDataArrayList = new ArrayList<PlantFeedData>();
         for (int i = 0; i < n; i++) {
-            PlantData plantData = new PlantData(createGoodPlantData(i), createGoodPlantTypeData());
+            PlantData plantData = new PlantData(createGoodPlantData(i), createGoodPlantTypeData(),createGoodPotData());
 
             plantFeedDataArrayList.add(new PlantFeedData(plantData));
         }
         return plantFeedDataArrayList;
     }
 
+    private  static JSONObject createGoodPotData() {
+        JSONObject potDataGood = new JSONObject();
+        String[] potNames = {"Kitchen Pot","Bathroom Pot","Hallway Pot","Garage Pot","Livingroom Pot"};
+        Random rand = new Random();
+        int rand1 = rand.nextInt(5);
+        int rand2 = rand.nextInt(120);
+
+        potDataGood.put("name", potNames[rand1]);
+        potDataGood.put("pot_id",rand2);
+        Date date = new Date(Instant.now().toEpochMilli() - (rand1 * 24*60*60*1000));
+        potDataGood.put("last_watered",date);
+        return potDataGood;
+    }
     private static JSONObject createGoodPlantTypeData() {
         //Create dummy object PlantTypeData
         JSONObject plantTypeDataGood = new JSONObject();
         Random rand = new Random();
-        int rand1 = rand.nextInt(5);
         int rand2 = rand.nextInt(5);
-        String[] potNames = {"Kitchen Pot","Bathroom Pot","Hallway Pot","Garage Pot","Livingroom Pot"};
         String[] plantTypeNames = {"Sunflower","Moonflower","Tomato","Bean Sprout","Cactus"};
-        plantTypeDataGood.put("plant_type", potNames[rand1]);
         plantTypeDataGood.put("name", plantTypeNames[rand2]);
         plantTypeDataGood.put("sun_coverage", new Double(8));
         plantTypeDataGood.put("temperature", new Double(23));

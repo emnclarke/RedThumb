@@ -4,17 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
 public class HistoricalPlantView extends AppCompatActivity {
+    private String potID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historical_plant_view);
         Intent intent = getIntent();
+
+        potID = intent.getStringExtra("pot_id_int");
         //Set up title Block
         TextView plantName = findViewById(R.id.plantNameHistorical);
         plantName.setText(intent.getStringExtra("plantTitle"));
@@ -79,5 +84,20 @@ public class HistoricalPlantView extends AppCompatActivity {
 
         TextView soilMositureQuality = findViewById(R.id.soilMoistureQualityData);
         soilMositureQuality.setText(intent.getStringExtra("soilMoistureQuality"));
+
+        TextView waterLastWateredData = findViewById(R.id.waterLastWateredData);
+        waterLastWateredData.setText(intent.getStringExtra("lastWatered"));
+
+        Button forceWaterButton = findViewById(R.id.forceWaterButton);
+        forceWaterButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                forceWaterNow();
+            }
+        });
     }
+
+    public void forceWaterNow(){
+        System.out.println("Force Water from PotID: " + potID);
+    }
+
 }
