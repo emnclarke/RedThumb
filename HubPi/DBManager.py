@@ -376,9 +376,28 @@ class DBManager(object):
         if not isinstance(potID, int):
             raise TypeError("potID must be int. Got: " + str(type(potID)))
         if not isinstance(numDataPoints, int):
-            raise TypeError("numDataPoints must be int. Got: " + str(type(timestamp)))
+            raise TypeError("numDataPoints must be int. Got: " + str(type(numDataPoints)))
             
         sql = "SELECT * FROM PlantData WHERE pot_id=%s ORDER BY timestamp DESC LIMIT %s" % (str(potID), str(numDataPoints))
+        self._cursor.execute(sql)
+        plantDataDBList = self._cursor.fetchall()
+        
+        plantData = []
+        
+        for plantDataDB in plantDataDBList:
+            plantData.append(self._convertDBtoPlantData(plantDataDB))
+        
+        return plantData
+    
+    def fetchOffsetData(self, potID, numDataPoints, offset):
+        if not isinstance(potID, int):
+            raise TypeError("potID must be int. Got: " + str(type(potID)))
+        if not isinstance(numDataPoints, int):
+            raise TypeError("numDataPoints must be int. Got: " + str(type(numDataPoints)))
+        if not isinstance(offset, int):
+            raise TypeError("offset must be int. Got: " + str(type(offset)))
+
+        sql = "SELECT * FROM PlantData WHERE pot_id=%s ORDER BY timestamp DESC LIMIT %s,%s" % (str(potID), str(offset), str(numDataPoints))
         self._cursor.execute(sql)
         plantDataDBList = self._cursor.fetchall()
         
