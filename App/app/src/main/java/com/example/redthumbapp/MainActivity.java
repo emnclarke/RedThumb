@@ -28,12 +28,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void loadPlantData(){
     //Load plant data
+        MessageSender messageSender = new MessageSender();
+        String message = "requestPots";
+        //Send Data Request
+        messageSender.execute(message);
 
 
     }
     private void reloadPlantData(){
         //Force a load of plant Data
-
+        MessageSender messageSender = new MessageSender();
+        String message = "requestPots";
+        //Send Data Request
+        messageSender.execute(message);
 
     }
     private void loadPlantDataView(){
