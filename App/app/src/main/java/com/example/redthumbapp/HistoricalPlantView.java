@@ -78,6 +78,6 @@ public class HistoricalPlantView extends AppCompatActivity {
         idealSoilMoisture.setText(intent.getStringExtra("idealSoilMoisture"));
 
         TextView soilMositureQuality = findViewById(R.id.soilMoistureQualityData);
-        soilMositureQuality.setText(intent.getStringExtra("soilMositureQuality"));
+        soilMositureQuality.setText(intent.getStringExtra("soilMoistureQuality"));
     }
 }
