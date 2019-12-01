@@ -158,7 +158,7 @@ class DBManager(object):
         
     def deletePlantType(self, plantID):
         if not isinstance(plantID, int):
-            raise TypeError("plantID must be int. Got: " + str(type(plant.plantID)))
+            raise TypeError("plantID must be int. Got: " + str(type(plantID)))
         
         sql = "DELETE FROM PlantTypes WHERE plant_id=%s" % (str(plantID))
         self._cursor.execute(sql)
@@ -275,7 +275,7 @@ class DBManager(object):
         
     def deletePot(self, potID):
         if not isinstance(potID, int):
-            raise TypeError("potID must be int. Got: " + str(type(pot.potID)))
+            raise TypeError("potID must be int. Got: " + str(type(potID)))
         
         sql = "DELETE FROM SmartPots WHERE pot_id=%s" % (str(potID))
         self._cursor.execute(sql)
