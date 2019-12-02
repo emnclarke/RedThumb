@@ -18,7 +18,7 @@ if len(sys.argv) >= 5:
 
 debug = True
 
-logging.basicConfig(filename='appListener.log', filemode='w', format='%(levelname)s: %(message)s', level=logging.INFO)
+logging.basicConfig(filename='nodeConnector.log', filemode='w', format='%(levelname)s: %(message)s', level=logging.INFO)
 
 # Setting up database
 redThumbdb = DBManager()
