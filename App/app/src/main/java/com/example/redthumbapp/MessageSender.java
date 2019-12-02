@@ -2,6 +2,11 @@ package com.example.redthumbapp;
 
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,37 +21,64 @@ public class MessageSender extends AsyncTask<String, Void, Void>{
 
     private final static int PACKETSIZE = 100;
 
+    /*
 
+     */
     @Override
     protected Void doInBackground(String... voids){
 
-        String message = voids[0];
+        String request = voids[0];
         try
         {
-//            InetAddress localhost = InetAddress.getByName("localhost");
-
             int port = 11616;
             InetAddress hubIP = InetAddress.getByName("10.0.0.71");
 
             s = new DatagramSocket();
 
             // Send Request
-            message = new String(getIPAddress(true)) + " " + message;
-            byte [] data = message.getBytes();
+            request = new String(getIPAddress(true)) + " " + request;
+            byte [] data = request.getBytes();
             DatagramPacket sendPacket = new DatagramPacket( data, data.length, hubIP, port ) ;
             s.send(sendPacket);
 
             // Receive response
-            socket = new DatagramSocket(11616);
+            socket = new DatagramSocket(port);
             DatagramPacket packet = new DatagramPacket(new byte[PACKETSIZE], PACKETSIZE);
             socket.receive(packet);
-            System.out.println(new String(packet.getData()).trim());
+
+            // Response into a String
+            String str = new String(packet.getData());
+
+            // Formulating received Data
+            if (request.equals("requestPots")){
+                JSONArray jsonArray = new JSONArray(str);
+            }
+            else if(request.equals("requestPlantType")){
+                JSONObject jsonObject = new JSONObject(str);
+            }
+            else if(request.equals("requestAllPlantTypes")){
+                JSONArray jsonArray = new JSONArray(str);
+            }
+            else if(request.equals("requestPotCurrentData")){
+                JSONObject jsonObject = new JSONObject(str);
+            }
+            else if(request.equals("requestPotRecentData")){
+                JSONArray jsonArray = new JSONArray(str);
+            }
+            else if(request.equals("requestCompleteDataPot")){
+                JSONArray jsonArray = new JSONArray(str);
+            }
+            else{
+                //Receive acknowledge message
+            }
 
             s.close();
             socket.close();
 
         }
         catch(IOException e){
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
@@ -79,4 +111,5 @@ public class MessageSender extends AsyncTask<String, Void, Void>{
         } catch (Exception ignored) { } // for now eat exceptions
         return "";
     }
+
 }
