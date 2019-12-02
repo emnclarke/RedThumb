@@ -9,6 +9,12 @@ requestMessage = sys.argv[1]
 arg1 = ""
 arg2 = ""
 arg3 = ""
+arg4 = ""
+arg5 = ""
+arg6 = ""
+arg7 = ""
+arg8 = ""
+
 if len(sys.argv) >= 3:
     arg1 = sys.argv[2]
 if len(sys.argv) >= 4:
