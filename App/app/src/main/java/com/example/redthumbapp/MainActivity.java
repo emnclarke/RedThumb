@@ -6,15 +6,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    String HTTPResponseString;
     ArrayList<PlantFeedData> plantFeed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         //Load plantFeed
+        //Attempt to connect to the web server
+
 
         //Attempt to load view based on plantFeed
         loadPlantDataView();
@@ -40,26 +49,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void loadPlantData(){
     //Load plant data
-        MessageSender messageSender = new MessageSender();
-        String message = "requestPots";
-        //Send Data Request
-        messageSender.execute(message);
+        HTTPGetRequest request = new HTTPGetRequest();
+        request.execute("/?request=pot");
 
 
     }
     private void reloadPlantData(){
         //Force a load of plant Data
-        MessageSender messageSender = new MessageSender();
-        String message = "requestPots";
-        //Send Data Request
-        messageSender.execute(message);
+
 
     }
     private void loadPlantDataView(){
+
         RecyclerView plantDataRV = (RecyclerView) findViewById(R.id.plantDataRV);
 
         //Attempt to load plant data;
-
+        loadPlantData();
         if(plantFeed != null) {
             PlantDataAdapter adapter = new PlantDataAdapter(plantFeed);
             plantDataRV.setAdapter(adapter);
@@ -102,5 +107,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
     }
 
+    public class HTTPGetRequest extends AsyncTask<String, String, String> {
+        private static final String HUB_SERVER = "http://192.168.43.85:3000//";//FIXME:
+        static final String REQUEST_METHOD = "GET";
+        static final int READ_TIMEOUT = 5000;
+        static final int CONNECTION_TIMEOUT = 15000;
+
+
+        @Override
+        protected String doInBackground(String... request) {
+            String data;
+            String inputLine;
+
+            try{
+                //Connect to server
+                URL hubURL = new URL(HUB_SERVER + request);
+                HttpURLConnection connection = (HttpURLConnection) hubURL.openConnection();
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+                connection.connect();
+
+                //Get data
+                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                while((inputLine = bufferedReader.readLine()) != null){
+                    stringBuilder.append(inputLine);
+                }
+                bufferedReader.close();
+                streamReader.close();
+                data = stringBuilder.toString();
+
+            }catch (IOException e){
+                data = "error";
+            }
+            return data;
+        }
+
+        protected void onPostExecute(String data){
+            HTTPResponseString = data;
+            super.onPostExecute(data);
+        }
+    }
 
 }
+

@@ -2,6 +2,11 @@ package com.example.redthumbapp;
 
 import android.os.AsyncTask;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,39 +19,87 @@ public class MessageSender extends AsyncTask<String, Void, Void>{
     private DatagramSocket s;
     private DatagramSocket socket;
 
-    private final static int PACKETSIZE = 100;
+    private final static int PACKETSIZE = 2000;
 
+    /*
 
+     */
     @Override
     protected Void doInBackground(String... voids){
 
-        String message = voids[0];
+        String request = voids[0];
         try
         {
-//            InetAddress localhost = InetAddress.getByName("localhost");
-
             int port = 11616;
             InetAddress hubIP = InetAddress.getByName("10.0.0.71");
 
-            s = new DatagramSocket();
+            s = new DatagramSocket(port);
 
-            // Send Request
-            message = new String(getIPAddress(true)) + " " + message;
-            byte [] data = message.getBytes();
+            // Send Request for requestPots
+            request = new String(getIPAddress(true)) + " " + request;
+            byte [] data = request.getBytes();
             DatagramPacket sendPacket = new DatagramPacket( data, data.length, hubIP, port ) ;
             s.send(sendPacket);
 
-            // Receive response
-            socket = new DatagramSocket(11616);
+            // Receive response for requestPots
+            socket = new DatagramSocket(port);
             DatagramPacket packet = new DatagramPacket(new byte[PACKETSIZE], PACKETSIZE);
             socket.receive(packet);
-            System.out.println(new String(packet.getData()).trim());
+
+            // Pots as a JSONArray
+            String str = new String(packet.getData());
+            JSONArray jsonArray = new JSONArray(str);
+
+            //Receive all the pot data using pot_ids
+            for(int i = 0; i < jsonArray.length(); i++){
+
+                //Retrieve pot_id from JSONObject from JSONArray
+                int pot_id = jsonArray.getJSONObject(i).getInt("pot_id");
+
+                //Send Request for requestPlantType
+                request = "requestPlantType";
+                request = new String(getIPAddress(true)) + " " + request+ " " + pot_id;
+                data = request.getBytes();
+                sendPacket = new DatagramPacket( data, data.length, hubIP, port );
+                s.send(sendPacket);
+
+                //Receive response for requestPlantType
+                socket = new DatagramSocket(port);
+                packet = new DatagramPacket(new byte[PACKETSIZE], PACKETSIZE);
+                socket.receive(packet);
+
+            }
+
+//            // Formulating received Data
+//            if (request.equals("requestPots")){
+//                JSONArray jsonArray = new JSONArray(str);
+//            }
+//            else if(request.equals("requestPlantType")){
+//                JSONObject jsonObject = new JSONObject(str);
+//            }
+//            else if(request.equals("requestAllPlantTypes")){
+//                JSONArray jsonArray = new JSONArray(str);
+//            }
+//            else if(request.equals("requestPotCurrentData")){
+//                JSONObject jsonObject = new JSONObject(str);
+//            }
+//            else if(request.equals("requestPotRecentData")){
+//                JSONArray jsonArray = new JSONArray(str);
+//            }
+//            else if(request.equals("requestCompleteDataPot")){
+//                JSONArray jsonArray = new JSONArray(str);
+//            }
+//            else{
+//                //Receive acknowledge message
+//            }
 
             s.close();
             socket.close();
 
         }
         catch(IOException e){
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return null;
@@ -79,4 +132,5 @@ public class MessageSender extends AsyncTask<String, Void, Void>{
         } catch (Exception ignored) { } // for now eat exceptions
         return "";
     }
+
 }
