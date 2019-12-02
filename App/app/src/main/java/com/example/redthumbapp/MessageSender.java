@@ -33,7 +33,7 @@ public class MessageSender extends AsyncTask<String, Void, Void>{
             int port = 11616;
             InetAddress hubIP = InetAddress.getByName("10.0.0.71");
 
-            s = new DatagramSocket();
+            s = new DatagramSocket(port);
 
             // Send Request
             request = new String(getIPAddress(true)) + " " + request;
@@ -48,29 +48,41 @@ public class MessageSender extends AsyncTask<String, Void, Void>{
 
             // Response into a String
             String str = new String(packet.getData());
+            JSONArray jsonArray = new JSONArray(str);
 
-            // Formulating received Data
-            if (request.equals("requestPots")){
-                JSONArray jsonArray = new JSONArray(str);
+            //Receive all the pot data using pot_ids
+            for(int i = 0; i < jsonArray.length(); i++){
+                int pot_id = jsonArray.getJSONObject(i).getInt("pot_id");
+                request = "requestPlantType";
+                request = new String(getIPAddress(true)) + " " + request+ " " + pot_id;
+                data = request.getBytes();
+                sendPacket = new DatagramPacket( data, data.length, hubIP, port );
+                s.send(sendPacket);
+
             }
-            else if(request.equals("requestPlantType")){
-                JSONObject jsonObject = new JSONObject(str);
-            }
-            else if(request.equals("requestAllPlantTypes")){
-                JSONArray jsonArray = new JSONArray(str);
-            }
-            else if(request.equals("requestPotCurrentData")){
-                JSONObject jsonObject = new JSONObject(str);
-            }
-            else if(request.equals("requestPotRecentData")){
-                JSONArray jsonArray = new JSONArray(str);
-            }
-            else if(request.equals("requestCompleteDataPot")){
-                JSONArray jsonArray = new JSONArray(str);
-            }
-            else{
-                //Receive acknowledge message
-            }
+
+//            // Formulating received Data
+//            if (request.equals("requestPots")){
+//                JSONArray jsonArray = new JSONArray(str);
+//            }
+//            else if(request.equals("requestPlantType")){
+//                JSONObject jsonObject = new JSONObject(str);
+//            }
+//            else if(request.equals("requestAllPlantTypes")){
+//                JSONArray jsonArray = new JSONArray(str);
+//            }
+//            else if(request.equals("requestPotCurrentData")){
+//                JSONObject jsonObject = new JSONObject(str);
+//            }
+//            else if(request.equals("requestPotRecentData")){
+//                JSONArray jsonArray = new JSONArray(str);
+//            }
+//            else if(request.equals("requestCompleteDataPot")){
+//                JSONArray jsonArray = new JSONArray(str);
+//            }
+//            else{
+//                //Receive acknowledge message
+//            }
 
             s.close();
             socket.close();
