@@ -15,6 +15,8 @@ if len(sys.argv) >= 4:
     arg2 = sys.argv[3]
 if len(sys.argv) >= 5:
     arg3 = sys.argv[4]
+    
+##### EXPAND THESE TO 8 ARGS (>= 10) #####
 
 debug = True
 
@@ -76,7 +78,7 @@ elif requestMessage == "requestCompleteDataPot":
 # Data adjustments
 
 elif requestMessage == "addPlantType":
-    jsonData = json.loads(arg1)
+    jsonData = json.loads(arg1) ### Delete this, replace all jsonData with arg1 ... arg8
     plantType = PlantType(999, jsonData["name"], jsonData["water_frequency"], jsonData["water_length"], jsonData["temperature"], jsonData["humidity"], jsonData["soil_moisture"], jsonData["sun_coverage"])
     redThumbdb.submitPlantType(plantType)
     print("ack")
