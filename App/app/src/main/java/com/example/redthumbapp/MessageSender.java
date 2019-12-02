@@ -19,7 +19,7 @@ public class MessageSender extends AsyncTask<String, Void, Void>{
     private DatagramSocket s;
     private DatagramSocket socket;
 
-    private final static int PACKETSIZE = 100;
+    private final static int PACKETSIZE = 2000;
 
     /*
 
@@ -35,29 +35,38 @@ public class MessageSender extends AsyncTask<String, Void, Void>{
 
             s = new DatagramSocket(port);
 
-            // Send Request
+            // Send Request for requestPots
             request = new String(getIPAddress(true)) + " " + request;
             byte [] data = request.getBytes();
             DatagramPacket sendPacket = new DatagramPacket( data, data.length, hubIP, port ) ;
             s.send(sendPacket);
 
-            // Receive response
+            // Receive response for requestPots
             socket = new DatagramSocket(port);
             DatagramPacket packet = new DatagramPacket(new byte[PACKETSIZE], PACKETSIZE);
             socket.receive(packet);
 
-            // Response into a String
+            // Pots as a JSONArray
             String str = new String(packet.getData());
             JSONArray jsonArray = new JSONArray(str);
 
             //Receive all the pot data using pot_ids
             for(int i = 0; i < jsonArray.length(); i++){
+
+                //Retrieve pot_id from JSONObject from JSONArray
                 int pot_id = jsonArray.getJSONObject(i).getInt("pot_id");
+
+                //Send Request for requestPlantType
                 request = "requestPlantType";
                 request = new String(getIPAddress(true)) + " " + request+ " " + pot_id;
                 data = request.getBytes();
                 sendPacket = new DatagramPacket( data, data.length, hubIP, port );
                 s.send(sendPacket);
+
+                //Receive response for requestPlantType
+                socket = new DatagramSocket(port);
+                packet = new DatagramPacket(new byte[PACKETSIZE], PACKETSIZE);
+                socket.receive(packet);
 
             }
 
