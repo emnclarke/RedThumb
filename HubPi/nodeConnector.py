@@ -15,7 +15,16 @@ if len(sys.argv) >= 4:
     arg2 = sys.argv[3]
 if len(sys.argv) >= 5:
     arg3 = sys.argv[4]
-    
+if len(sys.argv) >= 6:
+    arg4 = sys.argv[5]
+if len(sys.argv) >= 7:
+    arg5 = sys.argv[6]
+if len(sys.argv) >= 8:
+    arg6 = sys.argv[7]
+if len(sys.argv) >= 9:
+    arg7 = sys.argv[8]
+if len(sys.argv) >= 10:
+    arg8 = sys.argv[9]
 ##### EXPAND THESE TO 8 ARGS (>= 10) #####
 
 debug = True
