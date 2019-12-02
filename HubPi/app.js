@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
   console.log(q.request);
   
   var spawn = require("child_process").spawn;
-  var process = spawn('python',["./nodeConnector.py", q.request, q.arg1, q.arg2, q.arg3]);
+  var process = spawn('python',["./nodeConnector.py", q.request, q.arg1, q.arg2, q.arg3, q.arg4, q.arg5, q.arg6, q.arg7, q.arg8]);
 
   var response = ""
 

@@ -9,14 +9,28 @@ requestMessage = sys.argv[1]
 arg1 = ""
 arg2 = ""
 arg3 = ""
+arg4 = ""
+arg5 = ""
+arg6 = ""
+arg7 = ""
+arg8 = ""
+
 if len(sys.argv) >= 3:
     arg1 = sys.argv[2]
 if len(sys.argv) >= 4:
     arg2 = sys.argv[3]
 if len(sys.argv) >= 5:
     arg3 = sys.argv[4]
-    
-##### EXPAND THESE TO 8 ARGS (>= 10) #####
+if len(sys.argv) >= 6:
+    arg4 = sys.argv[5]
+if len(sys.argv) >= 7:
+    arg5 = sys.argv[6]
+if len(sys.argv) >= 8:
+    arg6 = sys.argv[7]
+if len(sys.argv) >= 9:
+    arg7 = sys.argv[8]
+if len(sys.argv) >= 10:
+    arg8 = sys.argv[9]
 
 debug = True
 
@@ -78,15 +92,13 @@ elif requestMessage == "requestCompleteDataPot":
 # Data adjustments
 
 elif requestMessage == "addPlantType":
-    jsonData = json.loads(arg1) ### Delete this, replace all jsonData with arg1 ... arg8
-    plantType = PlantType(999, jsonData["name"], jsonData["water_frequency"], jsonData["water_length"], jsonData["temperature"], jsonData["humidity"], jsonData["soil_moisture"], jsonData["sun_coverage"])
+    plantType = PlantType(999, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
     redThumbdb.submitPlantType(plantType)
     print("ack")
 
 elif requestMessage == "updatePlantType":
-    jsonData = json.loads(arg1)
-    logging.info("Update plant type %s" % str(jsonData["plant_id"]))
-    plantType = PlantType(jsonData["plant_id"], jsonData["name"], jsonData["water_frequency"], jsonData["water_length"], jsonData["temperature"], jsonData["humidity"], jsonData["soil_moisture"], jsonData["sun_coverage"])
+    logging.info("Update plant type %s" % arg1)
+    plantType = PlantType(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
     redThumbdb.updatePlantType(plantType)
     print("ack")
 
@@ -97,20 +109,18 @@ elif requestMessage == "deletePlantType":
     print("ack")
 
 elif requestMessage == "addPot":
-    jsonData = json.loads(arg1)
-    smartPot = SmartPot(999, jsonData["name"], jsonData["pot_ip"], jsonData["plant_id"], jsonData["last_watered"], jsonData["low_water"], jsonData["water_flag"])
+    smartPot = SmartPot(999, arg1, arg2, arg3, arg4, arg5, arg6)
     redThumbdb.submitPot(smartPot)
     print("ack")
 
 elif requestMessage == "updatePot":
-    jsonData = json.loads(arg1)
-    logging.info("Update plant type %s" % str(jsonData["pot_id"]))
-    smartPot = SmartPot(jsonData["pot_id"], jsonData["name"], jsonData["pot_ip"], jsonData["plant_id"], jsonData["last_watered"], jsonData["low_water"], jsonData["water_flag"])
+    logging.info("Update pot %s" % str(arg1))
+    smartPot = SmartPot(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
     redThumbdb.updatePot(smartPot)
     print("ack")
 
 elif requestMessage == "deletePot":
-    pot =json.loads(arg1)
+    pot = arg1
     logging.info("Delete pot %s" % pot)
     redThumbdb.deletePot(int(pot))
     print("ack")
