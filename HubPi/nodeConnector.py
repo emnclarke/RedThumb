@@ -6,31 +6,47 @@ from DBManager import *
 import logging
 
 requestMessage = sys.argv[1]
-arg1 = ""
-arg2 = ""
-arg3 = ""
-arg4 = ""
-arg5 = ""
-arg6 = ""
-arg7 = ""
-arg8 = ""
+arg1 = None
+arg2 = None
+arg3 = None
+arg4 = None
+arg5 = None
+arg6 = None
+arg7 = None
+arg8 = None
 
 if len(sys.argv) >= 3:
     arg1 = sys.argv[2]
+    if arg1 == "null":
+        arg1 = None
 if len(sys.argv) >= 4:
     arg2 = sys.argv[3]
+    if arg2 == "null":
+        arg2 = None
 if len(sys.argv) >= 5:
     arg3 = sys.argv[4]
+    if arg3 == "null":
+        arg3 = None
 if len(sys.argv) >= 6:
     arg4 = sys.argv[5]
+    if arg4 == "null":
+        arg4 = None
 if len(sys.argv) >= 7:
     arg5 = sys.argv[6]
+    if arg5 == "null":
+        arg5 = None
 if len(sys.argv) >= 8:
     arg6 = sys.argv[7]
+    if arg6 == "null":
+        arg6 = None
 if len(sys.argv) >= 9:
     arg7 = sys.argv[8]
+    if arg7 == "null":
+        arg7 = None
 if len(sys.argv) >= 10:
     arg8 = sys.argv[9]
+    if arg8 == "null":
+        arg8 = None
 
 debug = True
 
@@ -92,12 +108,42 @@ elif requestMessage == "requestCompleteDataPot":
 # Data adjustments
 
 elif requestMessage == "addPlantType":
+    if arg1 is not None:
+        arg1 = str(arg1)
+    if arg2 is not None:
+        arg2 = int(arg2)
+    if arg3 is not None:
+        arg3 = int(arg3)
+    if arg4 is not None:
+        arg4 = float(arg4)
+    if arg5 is not None:
+        arg5 = float(arg5)
+    if arg6 is not None:
+        arg6 = str(arg6)
+    if arg7 is not None:
+        arg7 = int(arg7)
     plantType = PlantType(999, arg1, arg2, arg3, arg4, arg5, arg6, arg7)
     redThumbdb.submitPlantType(plantType)
     print("ack")
 
 elif requestMessage == "updatePlantType":
-    logging.info("Update plant type %s" % arg1)
+    logging.info("Update plant type %s" % str(arg1))
+    if arg1 is not None:
+        arg1 = int(arg1)
+    if arg2 is not None:
+        arg2 = str(arg2)
+    if arg3 is not None:
+        arg3 = int(arg3)
+    if arg4 is not None:
+        arg4 = int(arg4)
+    if arg5 is not None:
+        arg5 = float(arg5)
+    if arg6 is not None:
+        arg6 = float(arg6)
+    if arg7 is not None:
+        arg7 = str(arg7)
+    if arg8 is not None:
+        arg8 = int(arg8)
     plantType = PlantType(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
     redThumbdb.updatePlantType(plantType)
     print("ack")
@@ -109,12 +155,38 @@ elif requestMessage == "deletePlantType":
     print("ack")
 
 elif requestMessage == "addPot":
+    if arg1 is not None:
+        arg1 = str(arg1)
+    if arg2 is not None:
+        arg2 = str(arg2)
+    if arg3 is not None:
+        arg3 = int(arg3)
+    if arg4 is not None:
+        arg4 = str(arg4)
+    if arg5 is not None:
+        arg5 = int(arg5)
+    if arg6 is not None:
+        arg6 = int(arg6)
     smartPot = SmartPot(999, arg1, arg2, arg3, arg4, arg5, arg6)
     redThumbdb.submitPot(smartPot)
     print("ack")
 
 elif requestMessage == "updatePot":
     logging.info("Update pot %s" % str(arg1))
+    if arg1 is not None:
+        arg1 = int(arg1)
+    if arg2 is not None:
+        arg2 = str(arg2)
+    if arg3 is not None:
+        arg3 = str(arg3)
+    if arg4 is not None:
+        arg4 = int(arg4)
+    if arg5 is not None:
+        arg5 = str(arg5)
+    if arg6 is not None:
+        arg6 = int(arg6)
+    if arg7 is not None:
+        arg7 = int(arg7)
     smartPot = SmartPot(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
     redThumbdb.updatePot(smartPot)
     print("ack")
@@ -166,3 +238,8 @@ print ("end")
 # "10.0.0.70 updatePot {"pot_id": 5, "name": "aaab123bba", "pot_ip": null, "plant_id": 2, "last_watered": null, "low_water": null, "water_flag": null}"
 
 # "deletePot 5" - Deletes specified pot
+
+
+# 192.168.43.85:3000/?request=updatePot&arg1=10&arg2=ccc&arg3=null&arg4=null&arg5=null&arg6=null&arg7=null
+
+# python nodeConnector.py updatePot 10 bbb null null null null
