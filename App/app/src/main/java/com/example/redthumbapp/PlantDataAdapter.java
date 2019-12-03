@@ -230,7 +230,7 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
                 intent.putExtra("soilMoistureQuality", getIndexQualityString(plantDataList.get(position).getSoilMoistureQuality()));
 
                 //Pot Data
-                intent.putExtra("lastWatered", plantDataList.get(position).getLastWatered());
+                intent.putExtra("lastWatered", (plantDataList.get(position).getLastWatered() == null) ? "Never" :plantDataList.get(position).getLastWatered());
             }
             intent.putExtra("pot_id_int",plantDataList.get(position).getPotIDInteger());
             v.getContext().startActivity(intent);

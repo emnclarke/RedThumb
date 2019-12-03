@@ -77,6 +77,9 @@ public class PlantFeedData {
     }
 
     public String getLastWatered(){
+        if(plantData.getLastWatered() == null){
+            return "Never";
+        }
         Calendar today = Calendar.getInstance();
         Calendar lastWatered = Calendar.getInstance();
         Timestamp todayTime = new Timestamp(Instant.now().toEpochMilli());
