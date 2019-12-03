@@ -43,15 +43,26 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         textPlantID.setText(plantData.getPotID());
         TextView textPlantType = viewHolder.textPlantType;
         textPlantType.setText(plantData.getPlantType());
-        TextView textSunlight = viewHolder.textSunlight;
-        textSunlight.setText((plantData.getSunlight() == 1.0 ? "Bright" : "Dark"));
-        TextView textTemperature = viewHolder.textTemperature;
 
-        textTemperature.setText((double) Math.round(plantData.getTemperature() * 100d) / 100d + "°C");
+        TextView textSunlight = viewHolder.textSunlight;
+        TextView textTemperature = viewHolder.textTemperature;
         TextView textHumidity = viewHolder.textHumidity;
-        textHumidity.setText((double) Math.round(plantData.getHumidity() * 100d) / 100d + "%");
         TextView textSoilMoisture = viewHolder.textSoilMoisture;
-        textSoilMoisture.setText((double) Math.round(plantData.getSoilMoisture() * 100d) / 100d + "%");
+
+
+        //If Plant has no data:
+        if(plantDataList.get(position).isData()) {
+
+            textSunlight.setText((plantData.getSunlight() == 1.0 ? "Bright" : "Dark"));
+            textTemperature.setText((double) Math.round(plantData.getTemperature() * 100d) / 100d + "°C");
+            textHumidity.setText((double) Math.round(plantData.getHumidity() * 100d) / 100d + "%");
+            textSoilMoisture.setText((double) Math.round(plantData.getSoilMoisture() * 100d) / 100d + "%");
+        }else{
+            textSunlight.setText("No data");
+            textTemperature.setText("No data");
+            textHumidity.setText("No data");
+            textSoilMoisture.setText("No Data");
+        }
 
         //Find a plant Icon based on the PotID
         //This means a pot will always have the same icon

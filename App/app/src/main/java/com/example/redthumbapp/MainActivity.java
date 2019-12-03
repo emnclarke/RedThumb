@@ -5,12 +5,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.simple.JSONArray;
@@ -51,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
+
                 loadPlantDataView();
+
             }
         });
 
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             plantDataRV.setAdapter(adapter);
             plantDataRV.setLayoutManager(new LinearLayoutManager(this));
         } else {
-            //No plant data loaded case
+
         }
     }
 
@@ -151,7 +155,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void httpResponse(String data) {
         if (data.equals("error")) {
-            System.out.println("Data Could not be loaded!");
+            Context context = getApplicationContext();
+            CharSequence text = "Data could not be loaded";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
             return;
         } else {
             //Expecting pot List
@@ -232,6 +241,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onPostExecute(data);
         }
     }
+
+
 
 }
 

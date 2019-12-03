@@ -96,8 +96,11 @@ public class HistoricalPlantView extends AppCompatActivity {
         });
     }
 
-    public void forceWaterNow(){
-        System.out.println("Force Water from PotID: " + potID);
+    public void forceWaterNow()
+    {
+        HTTPGetRequest request = new HTTPGetRequest();
+        request.execute(String.format("?request=updatePot&arg1=%s&arg2=null&arg3=null&arg4=null&arg5=null&arg6=null&arg7=1",potID));
+
     }
 
 }

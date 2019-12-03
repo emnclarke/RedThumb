@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00000000"
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
@@ -39,173 +40,312 @@
             android:background="@color/colorAccent" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:text="Create New Plant Type"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
+
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp">
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:text="Name: " />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="Temperature: " />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="Humidity: " />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="Soil Moisture: " />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="Sun Coverage: " />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="Water Frequency: " />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:text="Water Intensity: " />
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="match_parent"
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/createPlantType"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Name: "
+                        android:text="Create" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/plantTypeNameInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+                        android:hint="Enter the plant type name."
+                        android:inputType="textFilter"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName"
-                            android:id="@+id/plantTypeNameInput"
-                            android:hint="Enter the plant type name."
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                    <SeekBar
+                        android:id="@+id/plantTypeTempInput"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:max="30" />
 
-                    </LinearLayout>
-                    <LinearLayout
+                    <SeekBar
+                        android:id="@+id/plantTypeHumidInput"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:max="100" />
+
+                    <SeekBar
+                        android:id="@+id/plantTypeSoilMoistureInput"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:max="2" />
+
+                    <SeekBar
+                        android:id="@+id/plantTypeSunCoverageInput"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:max="24" />
+
+                    <SeekBar
+                        android:id="@+id/plantTypeWaterFreqInput"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:max="30" />
+
+                    <SeekBar
+                        android:id="@+id/plantTypeWaterIntensityInput"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:max="30" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Temperature: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:layout_height="40dp" />
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:id="@+id/plantTypeTemperatureInput"
-                            android:hint="Enter the ideal temperature (°C)"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-                    </LinearLayout>
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/plantTypeTempVal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Humidity: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:layout_height="25dp" />
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:id="@+id/plantTypeHumidityInput"
-                            android:hint="Enter the ideal humidity (%)"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-                    </LinearLayout>
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/plantTypeHumidVal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Soil Moisture: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:layout_height="25dp" />
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:id="@+id/plantTypeSoilMoistureInput"
-                            android:hint="Enter the ideal soil mositure (Dry/Wet/Water)"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-                    </LinearLayout>
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/plantTypeMoistVal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Sun Coverage"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:layout_height="25dp" />
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:id="@+id/plantTypeSunCoverageInput"
-                            android:hint="Enter the ideal sun coverage (Hours)"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-                    </LinearLayout>
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/plantTypeSunCoverageVal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Water Frequency"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                        android:layout_height="25dp" />
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:id="@+id/plantTypeWaterFreqInput"
-                            android:hint="Enter the default water freqeuncy (Days)"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-                    </LinearLayout>
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/plantTypeWaterFreqVal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="25dp" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Water Intensity"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                    <TextView
+                        android:id="@+id/plantTypeWaterIntensityVal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp" />
 
-                        <SeekBar
-                            android:id="@+id/plantTypeWaterIntensityInput"
-                            android:layout_width="100dp"
-                            android:layout_height="match_parent"
-                            android:max="10" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="0"
-                            android:id="@+id/waterIntensityVal"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/createPlantType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create" />
+
+
         </LinearLayout>
 
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="16dp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="25dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp">
+
+        <FrameLayout
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Create New Pot"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:text="Name: " />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:text="Plant Type: " />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:text="Pot IP: " />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/createPot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Create" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/potName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
+                        android:hint="Enter the plant type name."
+                        android:inputType="textFilter"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+                        android:orientation="horizontal">
+
+                        <SeekBar
+                            android:id="@+id/plantTypesInput"
+                            android:layout_width="120dp"
+                            android:layout_height="40dp" />
+
+                        <TextView
+                            android:id="@+id/plantTypesVal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/potIP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:digits="1234567890."
+                        android:hint="Enter the plant type name."
+                        android:inputType="textFilter"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
