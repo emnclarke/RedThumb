@@ -81,8 +81,9 @@ public class PlantData {
                 continue;
             }
             this.times.add(((Timestamp.valueOf((String) plantDataRaw.get(i).get("timestamp")))));
-
-            this.sunLight.add((plantDataRaw.get(i).get("sunlight") == null) ? null : (plantDataRaw.get(i).get("sunlight").equals(1.0)));
+            Double sunlightTemp = Double.valueOf((long) plantDataRaw.get(i).get("sunlight"));
+            this.sunLight.add((plantDataRaw.get(i).get("sunlight") == null) ? null : (sunlightTemp.equals(1.0)));
+            System.out.println();
             this.humidity.add((plantDataRaw.get(i).get("humidity") == null) ? null : Double.valueOf((Double) plantDataRaw.get(i).get("humidity")));
             this.temperature.add((plantDataRaw.get(i).get("temperature") == null) ? null : Double.valueOf((Double) plantDataRaw.get(i).get("temperature")));
             this.soilMoisture.add(convertSoilMoisture((String) plantDataRaw.get(i).get("soil_moisture")));
@@ -169,7 +170,7 @@ public class PlantData {
 //                this.soilMoisture.add(datapoints, (double) plantDataRaw[i].get("soil_moisture"));
 //                datapoints++;
 //            }
-//        }
+//
 //
 //
 //    }
@@ -177,6 +178,9 @@ public class PlantData {
     //Sensor values record sunlight or no sunlight and give us a sunlight hours measurement,
     //This hours value is assumed to be correct and we won't adjust for error.
     private Double getSunCoverageQuality(double sunCoverageHours) {
+        if(sunCoverageHours>idealSunCoverage){
+            return 100.0;
+        }
         return 100-(Math.abs(sunCoverageHours - idealSunCoverage) / (idealSunCoverage)) * 100;
     }
 

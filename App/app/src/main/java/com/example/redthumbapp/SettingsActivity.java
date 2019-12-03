@@ -233,7 +233,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-                waterIntensityVal.setText("" + progress + " Minutes");
+                waterIntensityVal.setText("" + progress + " Seconds");
             }
 
             @Override

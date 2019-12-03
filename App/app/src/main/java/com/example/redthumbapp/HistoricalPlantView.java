@@ -94,8 +94,20 @@ public class HistoricalPlantView extends AppCompatActivity {
                 forceWaterNow();
             }
         });
+
+        Button deletePotButton = findViewById(R.id.deletePotButton);
+        deletePotButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                deletePot();
+                finish();
+            }
+        });
     }
 
+    public void deletePot(){
+        HTTPGetRequest request = new HTTPGetRequest();
+        request.execute(String.format("?request=deletePot&arg1=%s",potID));
+    }
     public void forceWaterNow()
     {
         HTTPGetRequest request = new HTTPGetRequest();

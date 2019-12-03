@@ -137,11 +137,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.loadFakeData:
-                break;
-            case R.id.forceLoadData:
-                loadPlantDataView();
-
             default:
                 return super.onOptionsItemSelected(item);
         }
