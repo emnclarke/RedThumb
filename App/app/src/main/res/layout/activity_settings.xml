@@ -130,7 +130,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
                             android:id="@+id/plantTypeSoilMoistureInput"
-                            android:hint="Enter the ideal soil mositure (%)"
+                            android:hint="Enter the ideal soil mositure (Dry/Wet/Water)"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
                     </LinearLayout>

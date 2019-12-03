@@ -1,8 +1,10 @@
 package com.example.redthumbapp;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ public class PlantData {
     private static int HUMIDITY_ERROR = 5;
 
     //Fields obtained from the database
-    private JSONObject[] plantDataRaw;
+    private ArrayList<JSONObject> plantDataRaw;
     private JSONObject plantTypeData;
 
     private String potName;
@@ -29,7 +31,7 @@ public class PlantData {
 
     //Each of the following are columns in the database.
     //Time
-    private ArrayList<Date> times;
+    private ArrayList<Timestamp> times;
 
     //Sunlight
     private ArrayList<Boolean> sunLight;
@@ -51,12 +53,15 @@ public class PlantData {
     /**
      * Default constructor.
      *
-     * @param plantDataRaw:  raw data obtained from the database
+     * @param plantDataRawArr:  raw data obtained from the database
      * @param plantTypeData: plant type data obtained from the database
      */
-    public PlantData(JSONObject[] plantDataRaw, JSONObject plantTypeData, JSONObject potData) {
-        this.datapoints = plantDataRaw.length;
-        this.plantDataRaw = plantDataRaw;
+    public PlantData(JSONArray plantDataRawArr, JSONObject plantTypeData, JSONObject potData) {
+        this.datapoints = plantDataRawArr.size();
+        plantDataRaw = new ArrayList<JSONObject>();
+        for(Object obj : plantDataRawArr){
+            this.plantDataRaw.add((JSONObject) obj);
+        }
         this.plantTypeData = plantTypeData;
 
         this.times = new ArrayList<>();
@@ -67,7 +72,7 @@ public class PlantData {
 
         int newDataPoints = datapoints;
         for (int i = 0; i < newDataPoints; i++) {
-            if (plantDataRaw[i].get("time") == null) {
+            if (plantDataRaw.get(i).get("timestamp") == null) {
                 //A date is required! (Without this, the datapoint is useless)
                 datapoints--;
                 if (datapoints <= 0) {
@@ -75,24 +80,43 @@ public class PlantData {
                 }
                 continue;
             }
-            this.times.add((Date) (plantDataRaw[i].get("time")));
-            this.sunLight.add((plantDataRaw[i].get("sunlight") == null) ? null : (boolean) plantDataRaw[i].get("sunlight"));
-            this.humidity.add((plantDataRaw[i].get("humidity") == null) ? null : (double) plantDataRaw[i].get("humidity"));
-            this.temperature.add((plantDataRaw[i].get("temperature") == null) ? null : (double) plantDataRaw[i].get("temperature"));
-            this.soilMoisture.add((plantDataRaw[i].get("soil_moisture") == null) ? null : (double) plantDataRaw[i].get("soil_moisture"));
+            this.times.add(((Timestamp.valueOf((String) plantDataRaw.get(i).get("timestamp")))));
+
+            this.sunLight.add((plantDataRaw.get(i).get("sunlight") == null) ? null : (plantDataRaw.get(i).get("sunlight").equals(1.0)));
+            this.humidity.add((plantDataRaw.get(i).get("humidity") == null) ? null : Double.valueOf((Double) plantDataRaw.get(i).get("humidity")));
+            this.temperature.add((plantDataRaw.get(i).get("temperature") == null) ? null : Double.valueOf((Double) plantDataRaw.get(i).get("temperature")));
+            this.soilMoisture.add(convertSoilMoisture((String) plantDataRaw.get(i).get("soil_moisture")));
+//            this.soilMoisture.add((plantDataRaw.get(i).get("soil_moisture") == null) ? null : Double.valueOf((Double) plantDataRaw.get(i).get("soil_moisture")));
 
         }
-        this.idealSunCoverage = (double) plantTypeData.get("sun_coverage");
-        this.idealHumidity = (double) plantTypeData.get("humidity");
-        this.idealTemperature = (double) plantTypeData.get("temperature");
-        this.idealSoilMoisture = (double) plantTypeData.get("soil_moisture");
+        this.idealSunCoverage = Double.valueOf((Long) plantTypeData.get("sun_coverage"));
+        this.idealHumidity = Double.valueOf((double) plantTypeData.get("humidity"));
+        this.idealTemperature = Double.valueOf((double) plantTypeData.get("temperature"));
+        this.idealSoilMoisture = convertSoilMoisture(( String)plantTypeData.get("soil_moisture"));
         this.plantType = (String) (plantTypeData.get("name"));
 
 
         //Pot data
         this.potName = (String) (potData.get("name"));
-        this.lastWatered = (Date) potData.get("last_watered");
-        this.potID = (int) potData.get("pot_id");
+        if(((potData.get("last_watered") == null)? "None" : potData.get("last_watered")).equals("None")){
+            this.lastWatered = null;
+        }else {
+            this.lastWatered = Date.valueOf((String) potData.get("last_watered"));
+        }
+        this.potID = Math.toIntExact((Long) potData.get("pot_id"));
+    }
+
+    private Double convertSoilMoisture(String soilMoisture) {
+        if(soilMoisture.equals("dry")){
+            return 0.0;
+        }
+        if(soilMoisture.equals("wet")){
+            return 50.0;
+        }
+        if(soilMoisture.equals("water")){
+            return 100.0;
+        }
+        return null;
     }
 
     /**
@@ -125,31 +149,30 @@ public class PlantData {
     /**
      * Adds new data to the plantData set, values with matching dates cannot be added.
      *
-     * @param plantDataRaw New data to be added to the plantData set.
      */
-    public void addPlantData(JSONObject[] plantDataRaw) {
-        boolean duplicateFlag;
-        for (int i = 0; i < plantDataRaw.length; i++) {
-            duplicateFlag = false;
-            Date currPlantData = (Date) plantDataRaw[i].get("time");
-            for (int j = 0; j < datapoints; j++) {
-                if (this.times.get(j).equals(currPlantData)) {
-                    duplicateFlag = true;
-                    break;
-                }
-            }
-            if (!duplicateFlag) {
-                this.times.add(datapoints, (Date) (plantDataRaw[i].get("time")));
-                this.sunLight.add(datapoints, (boolean) plantDataRaw[i].get("sunlight"));
-                this.humidity.add(datapoints, (double) plantDataRaw[i].get("humidity"));
-                this.temperature.add(datapoints, (double) plantDataRaw[i].get("temperature"));
-                this.soilMoisture.add(datapoints, (double) plantDataRaw[i].get("soil_moisture"));
-                datapoints++;
-            }
-        }
-
-
-    }
+//    public void add(ArrayList<JSONObject> plantDataRaw) {
+//        boolean duplicateFlag;
+//        for (int i = 0; i < plantDataRaw.length; i++) {
+//            duplicateFlag = false;
+//            Date currPlantData = (Date) plantDataRaw[i].get("time");
+//            for (int j = 0; j < datapoints; j++) {
+//                if (this.times.get(j).equals(currPlantData)) {
+//                    duplicateFlag = true;
+//                    break;
+//                }
+//            }
+//            if (!duplicateFlag) {
+//                this.times.add(datapoints, (Date) (plantDataRaw[i].get("time")));
+//                this.sunLight.add(datapoints, (boolean) plantDataRaw[i].get("sunlight"));
+//                this.humidity.add(datapoints, (double) plantDataRaw[i].get("humidity"));
+//                this.temperature.add(datapoints, (double) plantDataRaw[i].get("temperature"));
+//                this.soilMoisture.add(datapoints, (double) plantDataRaw[i].get("soil_moisture"));
+//                datapoints++;
+//            }
+//        }
+//
+//
+//    }
 
     //Sensor values record sunlight or no sunlight and give us a sunlight hours measurement,
     //This hours value is assumed to be correct and we won't adjust for error.
@@ -189,7 +212,7 @@ public class PlantData {
      *
      * @return A list of indexes which belong to the subset
      */
-    private List<Integer> createPlantDataSubset(Date startDate, Date endDate) {
+    private List<Integer> createPlantDataSubset(Timestamp startDate, Timestamp endDate) {
         if (endDate.before(startDate)) {
             throw new IllegalArgumentException("startDate must be before endDate!");
         }
@@ -225,8 +248,8 @@ public class PlantData {
      *
      * @return The most recent date.
      */
-    public java.sql.Date getMostRecentDate() {
-        Date maxDate = this.times.get(0);
+    public Timestamp getMostRecentDate() {
+        Timestamp maxDate = this.times.get(0);
         for (int i = 1; i < datapoints; i++) {
             if (maxDate.before(this.times.get(i))) {
                 maxDate = this.times.get(i);
@@ -245,7 +268,9 @@ public class PlantData {
      * @return An array of ints containing the most recent feed data. (sunLight,Humidity,Temperature,SoilMoisture)
      */
     public double[] getFeedData() {
-
+        if(this.datapoints == 0){
+            return null;
+        }
         int maxDate = getMostRecentDateIndex();
         double[] feedData = new double[4];
         feedData[0] = (this.sunLight.get(maxDate)) ? 1 : 0; //Convert from boolean to int.
@@ -262,13 +287,16 @@ public class PlantData {
      * @return An array of quality ints (Sunlight, Humidity,Temperature,SoilMoisture).
      */
     public double[] getFeedDataQualities() {
+        if(this.datapoints == 0){
+            return null;
+        }
         int maxDateIndex = getMostRecentDateIndex();
 
         //Get date 24 prior to the maxDate.
         Calendar cal = Calendar.getInstance();
         cal.setTime(this.getMostRecentDate());
         cal.add(Calendar.DAY_OF_YEAR, -1);
-        List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
+        List<Integer> plantDataSubset = createPlantDataSubset(new Timestamp(cal.getTimeInMillis()), this.getMostRecentDate());
 
         double sunCoverage = 0;
         double humidityTotal = 0;
@@ -310,11 +338,11 @@ public class PlantData {
      * @param endDate:   The end of the range for the subset.
      * @return A map of the subset of data, with the datapoint being the value and the time is the key.
      */
-    public Map<Date, Double[]> getHistoricalFeed(Date startDate, Date endDate) {
+    public Map<Timestamp, Double[]> getHistoricalFeed(Timestamp startDate, Timestamp endDate) {
         List<Integer> plantDataSubset = createPlantDataSubset(startDate, endDate);
         int n = plantDataSubset.size();
 
-        Map<Date, Double[]> historicalFeedData = new HashMap<>();
+        Map<Timestamp, Double[]> historicalFeedData = new HashMap<>();
 
         for (int i : plantDataSubset) {
             Double[] currFeedData = new Double[4];
@@ -339,7 +367,7 @@ public class PlantData {
         Calendar cal = Calendar.getInstance();
         cal.setTime(this.getMostRecentDate());
         cal.add(Calendar.DAY_OF_YEAR, -1);
-        List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
+        List<Integer> plantDataSubset = createPlantDataSubset(new Timestamp(cal.getTimeInMillis()), this.getMostRecentDate());
         double humidityTotal = 0;
         double temperatureTotal = 0;
         double soilMoistureTotal = 0;
@@ -367,7 +395,7 @@ public class PlantData {
         Calendar cal = Calendar.getInstance();
         cal.setTime(this.getMostRecentDate());
         cal.add(Calendar.DAY_OF_YEAR, -1);
-        List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
+        List<Integer> plantDataSubset = createPlantDataSubset(new Timestamp(cal.getTimeInMillis()), this.getMostRecentDate());
         double humidityMax = this.humidity.get(plantDataSubset.get(0));
         double temperatureMax = this.temperature.get(plantDataSubset.get(0));;
         double soilMoistureMax = this.soilMoisture.get(plantDataSubset.get(0));;
@@ -396,7 +424,7 @@ public class PlantData {
         Calendar cal = Calendar.getInstance();
         cal.setTime(this.getMostRecentDate());
         cal.add(Calendar.DAY_OF_YEAR, -1);
-        List<Integer> plantDataSubset = createPlantDataSubset(new Date(cal.getTimeInMillis()), this.getMostRecentDate());
+        List<Integer> plantDataSubset = createPlantDataSubset(new Timestamp(cal.getTimeInMillis()), this.getMostRecentDate());
         double humidityMin = this.humidity.get(plantDataSubset.get(0));
         double temperatureMin = this.temperature.get(plantDataSubset.get(0));;
         double soilMoistureMin = this.soilMoisture.get(plantDataSubset.get(0));;

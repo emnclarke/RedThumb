@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -174,6 +175,16 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
+
+            if(!plantDataList.get(position).isData()){
+                Context context = v.getContext();
+                CharSequence text = "No data available";
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return;
+            }
             Intent intent = new Intent (v.getContext(), HistoricalPlantView.class);
             //Title Block
             intent.putExtra("plantTitle",plantDataList.get(position).getPotID());
@@ -181,7 +192,7 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
 
             //Sunlight Data
             intent.putExtra("dailySunlightHours",Double.toString(plantDataList.get(position).plantData.getFeedDataQualities()[4]));
-            intent.putExtra("dailySunlightHoursReq",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("sun_coverage")).toString());
+            intent.putExtra("dailySunlightHoursReq",((Long) plantDataList.get(position).plantData.getPlantTypeData().get("sun_coverage")).toString());
             //Calculate Quality Index for display
             intent.putExtra("sunlightQualityIndex",getIndexQualityString(plantDataList.get(position).getSunlightQuality()));
 
@@ -203,7 +214,7 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
             intent.putExtra("soilMoistureAverage",Double.toString(plantDataList.get(position).plantData.getDailyAverages()[2]));
             intent.putExtra("soilMoistureMax",Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[2]));
             intent.putExtra("soilMoistureMin",Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[2]));
-            intent.putExtra("idealSoilMoisture",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("soil_moisture")).toString());
+            intent.putExtra("idealSoilMoisture",(plantDataList.get(position).plantData.getPlantTypeData().get("soil_moisture")).toString());
             intent.putExtra("soilMoistureQuality",getIndexQualityString(plantDataList.get(position).getSoilMoistureQuality()));
 
             //Pot Data
