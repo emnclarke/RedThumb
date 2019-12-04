@@ -87,6 +87,8 @@ public class HistoricalPlantView extends AppCompatActivity {
 
         TextView waterLastWateredData = findViewById(R.id.waterLastWateredData);
         waterLastWateredData.setText(intent.getStringExtra("lastWatered"));
+        TextView lowWaterData = findViewById(R.id.lowWaterData);
+        lowWaterData.setText(intent.getStringExtra("lowWater"));
 
         Button forceWaterButton = findViewById(R.id.forceWaterButton);
         forceWaterButton.setOnClickListener(new View.OnClickListener() {
@@ -94,10 +96,25 @@ public class HistoricalPlantView extends AppCompatActivity {
                 forceWaterNow();
             }
         });
+
+        Button deletePotButton = findViewById(R.id.deletePotButton);
+        deletePotButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                deletePot();
+                finish();
+            }
+        });
     }
 
-    public void forceWaterNow(){
-        System.out.println("Force Water from PotID: " + potID);
+    public void deletePot(){
+        HTTPGetRequest request = new HTTPGetRequest();
+        request.execute(String.format("?request=deletePot&arg1=%s",potID));
+    }
+    public void forceWaterNow()
+    {
+        HTTPGetRequest request = new HTTPGetRequest();
+        request.execute(String.format("?request=updatePot&arg1=%s&arg2=null&arg3=null&arg4=null&arg5=null&arg6=null&arg7=1",potID));
+
     }
 
 }

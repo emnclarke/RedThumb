@@ -9,7 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HTTPGetRequest extends AsyncTask<String, String, String> {
-    private static final String HUB_SERVER = "http://192.168.43.85:3000//";//FIXME:
+    private static final String HUB_SERVER = "http://192.168.43.85:3000/";//FIXME:
     static final String REQUEST_METHOD = "GET";
     static final int READ_TIMEOUT = 5000;
     static final int CONNECTION_TIMEOUT = 15000;
@@ -22,7 +22,7 @@ public class HTTPGetRequest extends AsyncTask<String, String, String> {
 
         try{
             //Connect to server
-            URL hubURL = new URL(HUB_SERVER + request);
+            URL hubURL = new URL(HUB_SERVER + request[0]);
             HttpURLConnection connection = (HttpURLConnection) hubURL.openConnection();
             connection.setRequestMethod(REQUEST_METHOD);
             connection.setReadTimeout(READ_TIMEOUT);

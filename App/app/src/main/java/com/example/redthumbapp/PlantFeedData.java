@@ -3,6 +3,7 @@ package com.example.redthumbapp;
 import org.json.simple.JSONObject;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,13 +31,20 @@ public class PlantFeedData {
         this.potID = plantData.getPotName();
         this.plantType = plantData.getPlantType();
 
-        double[] feedData = plantData.getFeedData();
-        double[] feedQualities = plantData.getFeedDataQualities();
-        //(Sunlight, Humidity,Temperature,SoilMoisture).
-        this.sunlight = feedData[0];
-        this.temperature = feedData[2];
-        this.humidity = feedData[1];
-        this.soilMoisture = feedData[3];
+        double[] feedData;
+        double[] feedQualities;
+        if(plantData.getFeedData() == null) {
+            feedData = null;
+            feedQualities = null;
+        }else {
+            feedData = plantData.getFeedData();
+            feedQualities = plantData.getFeedDataQualities();
+            //(Sunlight, Humidity,Temperature,SoilMoisture).
+            this.sunlight = feedData[0];
+            this.temperature = feedData[2];
+            this.humidity = feedData[1];
+            this.soilMoisture = feedData[3];
+        }
 
         if(feedQualities != null) {
 
@@ -69,9 +77,12 @@ public class PlantFeedData {
     }
 
     public String getLastWatered(){
+        if(plantData.getLastWatered() == null){
+            return "Never";
+        }
         Calendar today = Calendar.getInstance();
         Calendar lastWatered = Calendar.getInstance();
-        Date todayTime = new Date(Instant.now().toEpochMilli());
+        Timestamp todayTime = new Timestamp(Instant.now().toEpochMilli());
         Date lastWateredTime = plantData.getLastWatered();
         today.setTime(todayTime);
         lastWatered.setTime(lastWateredTime);
@@ -115,61 +126,15 @@ public class PlantFeedData {
         return temperatureQuality;
     }
 
-    public static ArrayList<PlantFeedData> createDummyPlants(int n) {
 
-        ArrayList<PlantFeedData> plantFeedDataArrayList = new ArrayList<PlantFeedData>();
-        for (int i = 0; i < n; i++) {
-            PlantData plantData = new PlantData(createGoodPlantData(i), createGoodPlantTypeData(),createGoodPotData());
-
-            plantFeedDataArrayList.add(new PlantFeedData(plantData));
+    public boolean isData(){
+        if(this.plantData.getFeedData() == null ){
+            return false;
         }
-        return plantFeedDataArrayList;
-    }
-
-    private  static JSONObject createGoodPotData() {
-        JSONObject potDataGood = new JSONObject();
-        String[] potNames = {"Kitchen Pot","Bathroom Pot","Hallway Pot","Garage Pot","Livingroom Pot"};
-        Random rand = new Random();
-        int rand1 = rand.nextInt(5);
-        int rand2 = rand.nextInt(120);
-
-        potDataGood.put("name", potNames[rand1]);
-        potDataGood.put("pot_id",rand2);
-        Date date = new Date(Instant.now().toEpochMilli() - (rand1 * 24*60*60*1000));
-        potDataGood.put("last_watered",date);
-        return potDataGood;
-    }
-    private static JSONObject createGoodPlantTypeData() {
-        //Create dummy object PlantTypeData
-        JSONObject plantTypeDataGood = new JSONObject();
-        Random rand = new Random();
-        int rand2 = rand.nextInt(5);
-        String[] plantTypeNames = {"Sunflower","Moonflower","Tomato","Bean Sprout","Cactus"};
-        plantTypeDataGood.put("name", plantTypeNames[rand2]);
-        plantTypeDataGood.put("sun_coverage", new Double(8));
-        plantTypeDataGood.put("temperature", new Double(23));
-        plantTypeDataGood.put("humidity", new Double(50));
-        plantTypeDataGood.put("soil_moisture", new Double(90));
-        return plantTypeDataGood;
-
-    }
-
-    private static JSONObject[] createGoodPlantData(int i) {
-        Random rand = new Random();
-        int dataPoints = rand.nextInt(500) + 8;
-        JSONObject[] JSONarr = new JSONObject[dataPoints];
-        for (int j = 0; j < dataPoints; j++) {
-            i += j;
-            Date date = new Date(Instant.now().toEpochMilli() - (i * 10));
-            JSONObject plantDataRawGood = new JSONObject();
-            plantDataRawGood.put("time", date);
-            plantDataRawGood.put("pot_id", new Integer(i+j));
-            plantDataRawGood.put("sunlight", new Boolean(true));
-            plantDataRawGood.put("temperature", new Double(23.1));
-            plantDataRawGood.put("humidity", new Double(40.6 ));
-            plantDataRawGood.put("soil_moisture", new Double(69.2 ));
-            JSONarr[j] = plantDataRawGood;
+        if(this.plantData.getFeedDataQualities() == null){
+            return false;
         }
-        return JSONarr;
+
+        return true;
     }
 }

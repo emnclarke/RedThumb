@@ -2,6 +2,7 @@ package com.example.redthumbapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,15 +44,26 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         textPlantID.setText(plantData.getPotID());
         TextView textPlantType = viewHolder.textPlantType;
         textPlantType.setText(plantData.getPlantType());
-        TextView textSunlight = viewHolder.textSunlight;
-        textSunlight.setText((plantData.getSunlight() == 1.0 ? "Bright" : "Dark"));
-        TextView textTemperature = viewHolder.textTemperature;
 
-        textTemperature.setText((double) Math.round(plantData.getTemperature() * 100d) / 100d + "°C");
+        TextView textSunlight = viewHolder.textSunlight;
+        TextView textTemperature = viewHolder.textTemperature;
         TextView textHumidity = viewHolder.textHumidity;
-        textHumidity.setText((double) Math.round(plantData.getHumidity() * 100d) / 100d + "%");
         TextView textSoilMoisture = viewHolder.textSoilMoisture;
-        textSoilMoisture.setText((double) Math.round(plantData.getSoilMoisture() * 100d) / 100d + "%");
+
+
+        //If Plant has no data:
+        if(plantDataList.get(position).isData()) {
+
+            textSunlight.setText((plantData.getSunlight() == 1.0 ? "Bright" : "Dark"));
+            textTemperature.setText((double) Math.round(plantData.getTemperature() * 100d) / 100d + "°C");
+            textHumidity.setText((double) Math.round(plantData.getHumidity() * 100d) / 100d + "%");
+            textSoilMoisture.setText((double) Math.round(plantData.getSoilMoisture() * 100d) / 100d + "%");
+        }else{
+            textSunlight.setText("No data");
+            textTemperature.setText("No data");
+            textHumidity.setText("No data");
+            textSoilMoisture.setText("No Data");
+        }
 
         //Find a plant Icon based on the PotID
         //This means a pot will always have the same icon
@@ -114,6 +127,13 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
 
         ImageButton historyButton = viewHolder.historyButton;
 
+        ImageView lowWaterIC = viewHolder.lowWaterIC;
+        if(plantData.plantData.getLowWater()){
+            lowWaterIC.setAlpha(255);
+        }else{
+            lowWaterIC.setAlpha(0);
+        }
+
 
 
 
@@ -143,6 +163,8 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         public ProgressBar progressBarHumidity;
         public ProgressBar progressBarSoilMositure;
 
+        public ImageView lowWaterIC;
+
         //Button
         public ImageButton historyButton;
 
@@ -169,45 +191,60 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
             progressBarSoilMositure = (ProgressBar) itemView.findViewById(R.id.progressBarSoilMoisture);
 
             historyButton.setOnClickListener(this);
+
+            lowWaterIC = (ImageView) itemView.findViewById(R.id.lowWaterIC);
         }
 
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
+
+//            if(!plantDataList.get(position).isData()){
+//                Context context = v.getContext();
+//                CharSequence text = "No data available";
+//                int duration = Toast.LENGTH_SHORT;
+//
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.show();
+//                return;
+//            }
             Intent intent = new Intent (v.getContext(), HistoricalPlantView.class);
             //Title Block
             intent.putExtra("plantTitle",plantDataList.get(position).getPotID());
             intent.putExtra("plantType",plantDataList.get(position).getPlantType());
 
             //Sunlight Data
-            intent.putExtra("dailySunlightHours",Double.toString(plantDataList.get(position).plantData.getFeedDataQualities()[4]));
-            intent.putExtra("dailySunlightHoursReq",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("sun_coverage")).toString());
-            //Calculate Quality Index for display
-            intent.putExtra("sunlightQualityIndex",getIndexQualityString(plantDataList.get(position).getSunlightQuality()));
+            if(plantDataList.get(position).isData()) {
+                intent.putExtra("dailySunlightHours", Double.toString(plantDataList.get(position).plantData.getFeedDataQualities()[4]));
+                intent.putExtra("dailySunlightHoursReq", ((Long) plantDataList.get(position).plantData.getPlantTypeData().get("sun_coverage")).toString());
+                //Calculate Quality Index for display
+                intent.putExtra("sunlightQualityIndex", getIndexQualityString(plantDataList.get(position).getSunlightQuality()));
 
-            //Temperature Data
-            intent.putExtra("temperatureAverage",Double.toString(plantDataList.get(position).plantData.getDailyAverages()[0]));
-            intent.putExtra("temperatureMax",Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[0]));
-            intent.putExtra("temperatureMin",Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[0]));
-            intent.putExtra("idealTemperature",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("temperature")).toString());
-            intent.putExtra("temperatureQuality",getIndexQualityString(plantDataList.get(position).getTemperatureQuality()));
+                //Temperature Data
+                intent.putExtra("temperatureAverage", Double.toString(plantDataList.get(position).plantData.getDailyAverages()[0]));
+                intent.putExtra("temperatureMax", Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[0]));
+                intent.putExtra("temperatureMin", Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[0]));
+                intent.putExtra("idealTemperature", ((Double) plantDataList.get(position).plantData.getPlantTypeData().get("temperature")).toString());
+                intent.putExtra("temperatureQuality", getIndexQualityString(plantDataList.get(position).getTemperatureQuality()));
 
-            //Humidity Data
-            intent.putExtra("humidityAverage",Double.toString(plantDataList.get(position).plantData.getDailyAverages()[1]));
-            intent.putExtra("humidityMax",Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[1]));
-            intent.putExtra("humidityMin",Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[1]));
-            intent.putExtra("idealHumidity",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("humidity")).toString());
-            intent.putExtra("humidityQuality",getIndexQualityString(plantDataList.get(position).getHumidityQuality()));
+                //Humidity Data
+                intent.putExtra("humidityAverage", Double.toString(plantDataList.get(position).plantData.getDailyAverages()[1]));
+                intent.putExtra("humidityMax", Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[1]));
+                intent.putExtra("humidityMin", Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[1]));
+                intent.putExtra("idealHumidity", ((Double) plantDataList.get(position).plantData.getPlantTypeData().get("humidity")).toString());
+                intent.putExtra("humidityQuality", getIndexQualityString(plantDataList.get(position).getHumidityQuality()));
 
-            //Soil Moisture Data
-            intent.putExtra("soilMoistureAverage",Double.toString(plantDataList.get(position).plantData.getDailyAverages()[2]));
-            intent.putExtra("soilMoistureMax",Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[2]));
-            intent.putExtra("soilMoistureMin",Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[2]));
-            intent.putExtra("idealSoilMoisture",((Double) plantDataList.get(position).plantData.getPlantTypeData().get("soil_moisture")).toString());
-            intent.putExtra("soilMoistureQuality",getIndexQualityString(plantDataList.get(position).getSoilMoistureQuality()));
+                //Soil Moisture Data
+                intent.putExtra("soilMoistureAverage", Double.toString(plantDataList.get(position).plantData.getDailyAverages()[2]));
+                intent.putExtra("soilMoistureMax", Double.toString(plantDataList.get(position).plantData.getDailyMaximums()[2]));
+                intent.putExtra("soilMoistureMin", Double.toString(plantDataList.get(position).plantData.getDailyMinimums()[2]));
+                intent.putExtra("idealSoilMoisture", (plantDataList.get(position).plantData.getPlantTypeData().get("soil_moisture")).toString());
+                intent.putExtra("soilMoistureQuality", getIndexQualityString(plantDataList.get(position).getSoilMoistureQuality()));
 
-            //Pot Data
-            intent.putExtra("lastWatered", plantDataList.get(position).getLastWatered());
+                //Pot Data
+                intent.putExtra("lastWatered", (plantDataList.get(position).getLastWatered() == null) ? "Never" :plantDataList.get(position).getLastWatered());
+                intent.putExtra("lowWater", (plantDataList.get(position).plantData.getLowWater() ? "Low" : "Good"));
+            }
             intent.putExtra("pot_id_int",plantDataList.get(position).getPotIDInteger());
             v.getContext().startActivity(intent);
         }
