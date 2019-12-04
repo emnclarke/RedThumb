@@ -70,7 +70,7 @@ void loop() {
     Serial.println("waterFail");
   }
   
-  if(waterAnalog > 400) {
+  if(waterAnalog > 550) {
     lowWater = "false";
   } else {
     lowWater = "true";
@@ -84,7 +84,7 @@ void loop() {
     Serial.println("lightFail");
   }
   
-  if(lightLevel > 600) {
+  if(lightLevel > 800) {
     sunlight = "true";
   } else {
     sunlight = "false";

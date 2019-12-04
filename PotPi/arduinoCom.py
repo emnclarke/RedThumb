@@ -4,7 +4,7 @@ import serial, time
 import logging
 
 debug = True
-onMac = True
+onMac = False
 
 logging.basicConfig(filename='arduinoCom.log', filemode='w', format='%(levelname)s: %(message)s', level=logging.INFO)
 

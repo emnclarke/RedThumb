@@ -47,17 +47,18 @@ while True:
     
     # Data collection for each pot
     for pot in pots:
-        logging.info("Pot " + str(pot.potID))
-        
-        if debug:
-            logging.debug("Pot " + str(pot.potID) + " data: " + str(pot.toString()))
-        
-        # Requesting data from pot
-        logging.info("Requesting data from pot " + str(pot.potID) + " at ip: " + pot.potIP)
-        s.sendto("RequestPotData", (pot.potIP, port))
-        
-        # Attempting to receive data
+        time.sleep(1)
         try:
+            logging.info("Pot " + str(pot.potID))
+            
+            if debug:
+                logging.debug("Pot " + str(pot.potID) + " data: " + str(pot.toString()))
+        
+            # Requesting data from pot
+            logging.info("Requesting data from pot " + str(pot.potID) + " at ip: " + pot.potIP)
+            s.sendto("RequestPotData", (pot.potIP, port))
+        
+            # Attempting to receive data
             logging.info("Waiting to receive data from pot " + str(pot.potID) + " at ip: " + pot.potIP)
             buf, address = s.recvfrom(port)
             if buf.split()[0] != "ReportPotData":
@@ -144,7 +145,7 @@ while True:
             
         # Pot did not reply to data request, timeout
         except socket.timeout:
-            logging.error("Pot " + str(pot.potID) + " timeout at ip: " + pot.potIP + ". Continuing to next pot")
+            logging.error("Pot " + str(pot.potID) + " timeout at ip: " + str(pot.potIP) + ". Continuing to next pot")
         except Exception as e:
             logging.error("Unhandled exception: " + str(e.args[0]))
     

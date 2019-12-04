@@ -56,11 +56,14 @@ logging.basicConfig(filename='nodeConnector.log', filemode='w', format='%(leveln
 redThumbdb = DBManager()
 
 def makeJsonArray(dataList):
-    array = "["
-    for dataPoint in dataList:
-        array += dataPoint.toJson() + ", "
+    if len(dataList) != 0:
+        array = "["
+        for dataPoint in dataList:
+            array += dataPoint.toJson() + ", "
 
-    array = array[:-2] + "]"
+        array = array[:-2] + "]"
+    else:
+        array = "[]"
 
     return array
 
@@ -102,7 +105,7 @@ elif requestMessage == "requestCompleteDataPot":
     potData = redThumbdb.fetchPot(int(pot))
     plantTypeData = redThumbdb.fetchPlantType(potData.plantID)
     plantData = redThumbdb.fetchRecentData(int(pot), 1440)
-    message = "[" + potData.toJson() + ", " + plantTypeData.toJson() + ", " + makeJsonArray(plantData) + "]"
+    message = "{\"potData\":" + potData.toJson() + ", \"plantTypeData\":" + plantTypeData.toJson() + ", \"plantData\":" + makeJsonArray(plantData) + "}"
     print(message)
 
 # Data adjustments
@@ -155,6 +158,7 @@ elif requestMessage == "deletePlantType":
     print("ack")
 
 elif requestMessage == "addPot":
+    logging.info("Add pot")
     if arg1 is not None:
         arg1 = str(arg1)
     if arg2 is not None:
@@ -240,6 +244,6 @@ print ("end")
 # "deletePot 5" - Deletes specified pot
 
 
-# 192.168.43.85:3000/?request=updatePot&arg1=10&arg2=ccc&arg3=null&arg4=null&arg5=null&arg6=null&arg7=null
+# 192.168.43.85:3000/?request=updatePot&arg1=10&arg2=null&arg3=null&arg4=null&arg5=null&arg6=null&arg7=1
 
 # python nodeConnector.py updatePot 10 bbb null null null null
