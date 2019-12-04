@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Load plantFeed
-        //Attempt to connect to the web server
-
 
         //Attempt to load view based on plantFeed
         loadPlantDataView();
