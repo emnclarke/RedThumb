@@ -87,6 +87,8 @@ public class HistoricalPlantView extends AppCompatActivity {
 
         TextView waterLastWateredData = findViewById(R.id.waterLastWateredData);
         waterLastWateredData.setText(intent.getStringExtra("lastWatered"));
+        TextView lowWaterData = findViewById(R.id.lowWaterData);
+        lowWaterData.setText(intent.getStringExtra("lowWater"));
 
         Button forceWaterButton = findViewById(R.id.forceWaterButton);
         forceWaterButton.setOnClickListener(new View.OnClickListener() {

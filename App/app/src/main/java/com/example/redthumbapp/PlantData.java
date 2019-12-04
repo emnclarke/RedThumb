@@ -25,6 +25,7 @@ public class PlantData {
     private String potName;
     private String plantType;
     private Date lastWatered;
+    private boolean lowWater;
     private int potID;
     //Amount of individual datapoints in the plantData set.
     private int datapoints;
@@ -105,6 +106,7 @@ public class PlantData {
             this.lastWatered = Date.valueOf((String) potData.get("last_watered"));
         }
         this.potID = Math.toIntExact((Long) potData.get("pot_id"));
+        this.lowWater = ((int) potData.get("low_water")) == 1;
     }
 
     private Double convertSoilMoisture(String soilMoisture) {
@@ -450,5 +452,8 @@ public class PlantData {
         return mins;
     }
 
+    public boolean getLowWater(){
+        return this.lowWater;
+    }
 
 }

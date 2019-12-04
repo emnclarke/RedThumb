@@ -2,6 +2,7 @@ package com.example.redthumbapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,6 +127,13 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
 
         ImageButton historyButton = viewHolder.historyButton;
 
+        ImageView lowWaterIC = viewHolder.lowWaterIC;
+        if(plantData.plantData.getLowWater()){
+            lowWaterIC.setAlpha(255);
+        }else{
+            lowWaterIC.setAlpha(0);
+        }
+
 
 
 
@@ -155,6 +163,8 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         public ProgressBar progressBarHumidity;
         public ProgressBar progressBarSoilMositure;
 
+        public ImageView lowWaterIC;
+
         //Button
         public ImageButton historyButton;
 
@@ -181,6 +191,8 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
             progressBarSoilMositure = (ProgressBar) itemView.findViewById(R.id.progressBarSoilMoisture);
 
             historyButton.setOnClickListener(this);
+
+            lowWaterIC = (ImageView) itemView.findViewById(R.id.lowWaterIC);
         }
 
         @Override
@@ -231,6 +243,7 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
 
                 //Pot Data
                 intent.putExtra("lastWatered", (plantDataList.get(position).getLastWatered() == null) ? "Never" :plantDataList.get(position).getLastWatered());
+                intent.putExtra("lowWater", (plantDataList.get(position).plantData.getLowWater() ? "Low" : "Good"));
             }
             intent.putExtra("pot_id_int",plantDataList.get(position).getPotIDInteger());
             v.getContext().startActivity(intent);
