@@ -10,23 +10,26 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PlantData {
 
     //Values taken from the hardware documentation.
-    private static int TEMPERATURE_ERROR = 2;
-    private static int MOISTURE_ERROR = 5;
-    private static int HUMIDITY_ERROR = 5;
+    private static final int TEMPERATURE_ERROR = 2;
+    private static final int MOISTURE_ERROR = 5;
+    private static final int HUMIDITY_ERROR = 5;
 
     //Fields obtained from the database
     private ArrayList<JSONObject> plantDataRaw;
     private JSONObject plantTypeData;
 
+    //Important Pot and Plant Data
     private String potName;
     private String plantType;
     private Date lastWatered;
     private boolean lowWater;
     private int potID;
+
     //Amount of individual datapoints in the plantData set.
     private int datapoints;
 
@@ -53,25 +56,29 @@ public class PlantData {
 
     /**
      * Default constructor.
-     *
+     * @param potData: raw pot data obtained from the database
      * @param plantDataRawArr:  raw data obtained from the database
      * @param plantTypeData: plant type data obtained from the database
      */
     public PlantData(JSONArray plantDataRawArr, JSONObject plantTypeData, JSONObject potData) {
+        //Find the amount of plant data points
         this.datapoints = plantDataRawArr.size();
-        plantDataRaw = new ArrayList<JSONObject>();
+
+
         for(Object obj : plantDataRawArr){
             this.plantDataRaw.add((JSONObject) obj);
         }
+
         this.plantTypeData = plantTypeData;
 
+        plantDataRaw = new ArrayList<JSONObject>();
         this.times = new ArrayList<>();
         this.sunLight = new ArrayList<>();
         this.soilMoisture = new ArrayList<>();
         this.humidity = new ArrayList<>();
         this.temperature = new ArrayList<>();
 
-        int newDataPoints = datapoints;
+        int newDataPoints = datapoints; //Accounts for changing datapoints value during loop
         for (int i = 0; i < newDataPoints; i++) {
             if (plantDataRaw.get(i).get("timestamp") == null) {
                 //A date is required! (Without this, the datapoint is useless)
@@ -81,16 +88,18 @@ public class PlantData {
                 }
                 continue;
             }
+            //Convert string into Timestamp.
             this.times.add(((Timestamp.valueOf((String) plantDataRaw.get(i).get("timestamp")))));
+
             Double sunlightTemp = Double.valueOf((long) plantDataRaw.get(i).get("sunlight"));
             this.sunLight.add((plantDataRaw.get(i).get("sunlight") == null) ? null : (sunlightTemp.equals(1.0)));
-            System.out.println();
-            this.humidity.add((plantDataRaw.get(i).get("humidity") == null) ? null : Double.valueOf((Double) plantDataRaw.get(i).get("humidity")));
-            this.temperature.add((plantDataRaw.get(i).get("temperature") == null) ? null : Double.valueOf((Double) plantDataRaw.get(i).get("temperature")));
-            this.soilMoisture.add(convertSoilMoisture((String) plantDataRaw.get(i).get("soil_moisture")));
-//            this.soilMoisture.add((plantDataRaw.get(i).get("soil_moisture") == null) ? null : Double.valueOf((Double) plantDataRaw.get(i).get("soil_moisture")));
+
+            this.humidity.add((plantDataRaw.get(i).get("humidity") == null) ? null : (Double) plantDataRaw.get(i).get("humidity"));
+            this.temperature.add((plantDataRaw.get(i).get("temperature") == null) ? null : (Double) plantDataRaw.get(i).get("temperature"));
+            this.soilMoisture.add(convertSoilMoisture((String) Objects.requireNonNull(plantDataRaw.get(i).get("soil_moisture"))));
 
         }
+
         this.idealSunCoverage = Double.valueOf((Long) plantTypeData.get("sun_coverage"));
         this.idealHumidity = Double.valueOf((double) plantTypeData.get("humidity"));
         this.idealTemperature = Double.valueOf((double) plantTypeData.get("temperature"));
@@ -100,15 +109,23 @@ public class PlantData {
 
         //Pot data
         this.potName = (String) (potData.get("name"));
+        //A plant may have never been water, in this case its null and converted to such.
         if(((potData.get("last_watered") == null)? "None" : potData.get("last_watered")).equals("None")){
             this.lastWatered = null;
         }else {
             this.lastWatered = Date.valueOf((String) potData.get("last_watered"));
         }
+
         this.potID = Math.toIntExact((Long) potData.get("pot_id"));
+
         this.lowWater = Math.toIntExact((Long) potData.get("low_water")) == 1;;
     }
 
+    /**
+     * A helper function to convert soil_moisture strings to Doubles used for calculations
+     * @param soilMoisture - Dry/Wet/Water string, the 3 possible values from the sensor.
+     * @return - A double equivalent value of the soil moisture.
+     */
     private Double convertSoilMoisture(String soilMoisture) {
         if(soilMoisture.equals("dry")){
             return 0.0;
@@ -124,7 +141,6 @@ public class PlantData {
 
     /**
      * A simple getter for datapoints.
-     *
      * @return The amount of datapoints in the plantData set.
      */
     public int getDatapoints() {
@@ -149,33 +165,6 @@ public class PlantData {
     public int getPotID(){
         return this.potID;
     }
-    /**
-     * Adds new data to the plantData set, values with matching dates cannot be added.
-     *
-     */
-//    public void add(ArrayList<JSONObject> plantDataRaw) {
-//        boolean duplicateFlag;
-//        for (int i = 0; i < plantDataRaw.length; i++) {
-//            duplicateFlag = false;
-//            Date currPlantData = (Date) plantDataRaw[i].get("time");
-//            for (int j = 0; j < datapoints; j++) {
-//                if (this.times.get(j).equals(currPlantData)) {
-//                    duplicateFlag = true;
-//                    break;
-//                }
-//            }
-//            if (!duplicateFlag) {
-//                this.times.add(datapoints, (Date) (plantDataRaw[i].get("time")));
-//                this.sunLight.add(datapoints, (boolean) plantDataRaw[i].get("sunlight"));
-//                this.humidity.add(datapoints, (double) plantDataRaw[i].get("humidity"));
-//                this.temperature.add(datapoints, (double) plantDataRaw[i].get("temperature"));
-//                this.soilMoisture.add(datapoints, (double) plantDataRaw[i].get("soil_moisture"));
-//                datapoints++;
-//            }
-//
-//
-//
-//    }
 
     //Sensor values record sunlight or no sunlight and give us a sunlight hours measurement,
     //This hours value is assumed to be correct and we won't adjust for error.
@@ -189,9 +178,7 @@ public class PlantData {
     //NOTE
     //Quality values are adjusted by the error of the sensor,
     //if the value is within the error of the sensor it gets 100% quality.
-
     //This is done by flooring the value to the idealValue within the sensor error
-
     private Double getTemperatureQuality(double temperature) {
         Double tempDiff = idealTemperature - temperature;
         temperature += (Math.abs(tempDiff) > TEMPERATURE_ERROR ? TEMPERATURE_ERROR * (tempDiff > 0 ? 1 : -1) : tempDiff);
