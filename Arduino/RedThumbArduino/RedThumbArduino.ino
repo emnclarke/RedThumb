@@ -69,8 +69,10 @@ void loop() {
   if (isnan(waterAnalog)) {
     Serial.println("waterFail");
   }
+
+  // Serial.println(waterAnalog);
   
-  if(waterAnalog > 550) {
+  if(waterAnalog > 450) {
     lowWater = "false";
   } else {
     lowWater = "true";
