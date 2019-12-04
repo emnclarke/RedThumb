@@ -27,7 +27,8 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         View contactView = inflater.inflate(R.layout.plant_data_feed_item, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(contactView);
+        ViewHolder viewHolder;
+        viewHolder = new ViewHolder(contactView);
         return viewHolder;
     }
 
@@ -106,35 +107,28 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
 
         progressBarSunlight.setMax(100);
         progressBarSunlight.setProgress((int) plantData.getSunlightQuality());
-//        System.out.println("Sunlight Quality: " + plantData.getSunlightQuality());
 
         ProgressBar progressBarTemperature = viewHolder.progressBarTemperature;
         progressBarTemperature.setMax(100);
         progressBarTemperature.setProgress((int) plantData.getTemperatureQuality());
-//        System.out.println("Temperature Quality: " + plantData.getTemperatureQuality());
 
         ProgressBar progressBarHumidity = viewHolder.progressBarHumidity;
         progressBarHumidity.setMax(100);
         progressBarHumidity.setProgress((int) plantData.getHumidityQuality());
-//        System.out.println("Humidity Quality: " + plantData.getHumidityQuality());
 
         ProgressBar progressBarSoilMoisture = viewHolder.progressBarSoilMositure;
         progressBarSoilMoisture.setMax(100);
         progressBarSoilMoisture.setProgress((int) plantData.getSoilMoistureQuality());
-//        System.out.println("Soil Moisture Quality: " + plantData.getSoilMoistureQuality());
 
         ImageButton historyButton = viewHolder.historyButton;
 
+        //Show icon if lowWater is true
         ImageView lowWaterIC = viewHolder.lowWaterIC;
         if(plantData.plantData.getLowWater()){
             lowWaterIC.setAlpha(255);
         }else{
             lowWaterIC.setAlpha(0);
         }
-
-
-
-
     }
 
     // Returns the total count of items in the list
@@ -197,15 +191,6 @@ public class PlantDataAdapter extends RecyclerView.Adapter<PlantDataAdapter.View
         public void onClick(View v) {
             int position = getAdapterPosition();
 
-//            if(!plantDataList.get(position).isData()){
-//                Context context = v.getContext();
-//                CharSequence text = "No data available";
-//                int duration = Toast.LENGTH_SHORT;
-//
-//                Toast toast = Toast.makeText(context, text, duration);
-//                toast.show();
-//                return;
-//            }
             Intent intent = new Intent (v.getContext(), HistoricalPlantView.class);
             //Title Block
             intent.putExtra("plantTitle",plantDataList.get(position).getPotID());

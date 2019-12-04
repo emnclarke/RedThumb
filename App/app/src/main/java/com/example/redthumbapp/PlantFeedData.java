@@ -1,13 +1,9 @@
 package com.example.redthumbapp;
 
-import org.json.simple.JSONObject;
-
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Random;
 
 public class PlantFeedData {
     public PlantData plantData;

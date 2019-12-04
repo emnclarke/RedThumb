@@ -352,7 +352,6 @@ public class SettingsActivity extends AppCompatActivity {
         protected void onPostExecute(String data){
             httpResponse(data);
             super.onPostExecute(data);
-            //TODO:
         }
     }
 
