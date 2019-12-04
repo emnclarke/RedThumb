@@ -106,7 +106,7 @@ public class PlantData {
             this.lastWatered = Date.valueOf((String) potData.get("last_watered"));
         }
         this.potID = Math.toIntExact((Long) potData.get("pot_id"));
-        this.lowWater = ((int) potData.get("low_water")) == 1;
+        this.lowWater = Math.toIntExact((Long) potData.get("low_water")) == 1;;
     }
 
     private Double convertSoilMoisture(String soilMoisture) {
