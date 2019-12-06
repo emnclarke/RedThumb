@@ -222,28 +222,23 @@ print ("end")
 # "requestPotRecentData 1 1 1" - JSON object array with most recent pot data of specified pot and specified number of data points
 # [{"pot_id": x, "timestamp": x, "name": x, "temperature": x, "humidity": x,"soil_moisture": x, "sunlight": x}]
 
-# "requestCompleteDataPot 1" - JSON object array with all pot, plant and data of specified pot, max 60 data points of pot (1 hour)
-# [{"pot_id": x, "name": x, "pot_ip": x, "plant_id": x, "last_watered": x, "low_water": x, "water_flag": x}, {"plant_id": x, "name": x, "water_frequency": x, "water_length": x, "temperature": x, "humidity": x,"soil_moisture": x, "sun_coverage": x}, [{"pot_id": x, "timestamp": x, "name": x, "temperature": x, "humidity": x,"soil_moisture": x, "sunlight": x}]]
+# "requestCompleteDataPot 1" - JSON object array with all pot, plant and data of specified pot, max 1440 data points of pot (1 day)
+# [“potData”:{"pot_id": x, "name": x, "pot_ip": x, "plant_id": x, "last_watered": x, "low_water": x, "water_flag": x}, “plantTypeData”:{"plant_id": x, "name": x, "water_frequency": x, "water_length": x, "temperature": x, "humidity": x,"soil_moisture": x, "sun_coverage": x}, “plantData”:[{"pot_id": x, "timestamp": x, "name": x, "temperature": x, "humidity": x,"soil_moisture": x, "sunlight": x}]]
 
 # Change pots/plant types (All get sent back an "ack"
 
 # "addPlantType" - Adds plant type, example below. Any value that is null will go to mysql default value
-# "10.0.0.70 addPlantType {"plant_id": null, "name": "example", "water_frequency": null, "water_length": null, "temperature": null, "humidity": null,"soil_moisture": null, "sun_coverage": null}"
+# "addPlantType {"plant_id": null, "name": "example", "water_frequency": null, "water_length": null, "temperature": null, "humidity": null,"soil_moisture": null, "sun_coverage": null}"
 
 # "updatePlantType" - Updates plant type, example below. Any value that different from what is in database will be changed. Null values are ignored
-# "10.0.0.70 updatePlantType {"plant_id": null, "name": "example2", "water_frequency": 5, "water_length": null, "temperature": null, "humidity": null,"soil_moisture": null, "sun_coverage": null}"
+# "updatePlantType {"plant_id": null, "name": "example2", "water_frequency": 5, "water_length": null, "temperature": null, "humidity": null,"soil_moisture": null, "sun_coverage": null}"
 
 # "deletePlantType 5" - Deletes specified plant type
 
 # "addPot" - Adds pot, example below. Any value that is null will go to mysql default value
-# "10.0.0.70 addPot {"pot_id": 5, "name": "aaabbba", "pot_ip": null, "plant_id": null, "last_watered": null, "low_water": null, "water_flag": null}"
+# "addPot {"pot_id": 5, "name": "aaabbba", "pot_ip": null, "plant_id": null, "last_watered": null, "low_water": null, "water_flag": null}"
 
 # "updatePot" - Updates plant type, example below. Any value that different from what is in database will be changed. Null values are ignored
-# "10.0.0.70 updatePot {"pot_id": 5, "name": "aaab123bba", "pot_ip": null, "plant_id": 2, "last_watered": null, "low_water": null, "water_flag": null}"
+# "updatePot {"pot_id": 5, "name": "aaab123bba", "pot_ip": null, "plant_id": 2, "last_watered": null, "low_water": null, "water_flag": null}"
 
 # "deletePot 5" - Deletes specified pot
-
-
-# 192.168.43.85:3000/?request=updatePot&arg1=10&arg2=null&arg3=null&arg4=null&arg5=null&arg6=null&arg7=1
-
-# python nodeConnector.py updatePot 10 bbb null null null null
